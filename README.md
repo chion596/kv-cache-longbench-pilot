@@ -1,149 +1,92 @@
-# KV-cache robustness on LongBench — pilot
+# Квантизация KV Cache на LongBench: пилотное исследование
 
-New, independent continuation of the previous [Qwen3 KV-cache research](https://github.com/chion596/kv-cache-efficiency).
+Это **новый самостоятельный репозиторий** — продолжение [предыдущего исследования KV Cache на Qwen3](https://github.com/chion596/kv-cache-efficiency). Репозиторий публичный. Не добавляйте сюда веса моделей, скачанные датасеты, токены доступа и локальные переменные окружения.
 
-**Objective:** test whether the strong `q_group_size` dependence observed on synthetic passkey retrieval is also present on standard long-context tasks. The first controlled experiment uses Qwen3-1.7B and three LongBench v1 subsets (`passage_retrieval_en`, `multifieldqa_en`, `multifieldqa_zh`), comparing `DynamicCache`, stock HQQ `INT4 g16` and `INT4 g64`.
+## Цель и гипотеза
 
-This is an **exploratory pilot subset**, **not** a complete LongBench leaderboard submission. Never present pilot percentages as the published full LongBench score.
+Проверить, сохраняется ли сильная зависимость качества от `q_group_size`, выявленная в синтетическом passkey retrieval, на стандартных длинноконтекстных задачах LongBench.
 
-## Hypothesis
+**Гипотеза:** при фиксированных модели, датасете и входных токенах `INT4 g16` окажется менее разрушительным для качества, чем `INT4 g64`, хотя потребует немного больше GPU-памяти. Это пока гипотеза, а **не полученный результат**.
 
-Within the *same model, dataset and task instances*, `INT4 g16` will suffer a smaller quality drop relative to DynamicCache than `INT4 g64` on at least some long-context tasks. Whether this transfers from synthetic passkey retrieval to QA and from English to Chinese remains an **open question**; no LongBench results have been collected yet.
+Затем исследуем влияние семейства модели и языка. В текущей версии эксперименты на LongBench **ещё не запускались на GPU**.
 
-## Design
+## Первая экспериментальная матрица
 
-| Dimension | Pilot |
+| Параметр | Значение |
 |---|---|
-| Model | Qwen3-1.7B, FP16 weights, greedy decode, batch size 1 |
-| GPU | Single HSE NVIDIA V100-SXM2 32GB |
-| Baseline | Transformers `DynamicCache` |
-| Treatments | Transformers stock `QuantizedCache` + HQQ, INT4, `q_group_size=16/64` |
-| Other HQQ parameters | `axis_key=1`, `axis_value=1`, `residual_length=128` |
-| Dataset | Original LongBench v1; 3 named subsets |
-| Subsample | 40 samples per subset, random seed 2026 (fixed sampled IDs) |
-| Prompt | Official LongBench `dataset2prompt.json`; raw prompt, no chat template |
-| Max output tokens | Official LongBench `dataset2maxlen.json` per dataset |
-| Context cap | 16,384 *input tokens*, retain first and last halves on truncation |
-| Evaluation | Imported **official** `LongBench/metrics.py` |
-| Comparison | Each cache sees exactly the same token IDs; paired difference vs Dynamic |
+| Модель | Qwen3-1.7B; веса FP16 |
+| Устройство | 1 × NVIDIA V100 32 GiB на кластере ВШЭ |
+| Базовый вариант | `DynamicCache` |
+| Квантизация | `QuantizedCache` с HQQ: `INT4 g16` и `INT4 g64` |
+| Фиксированные HQQ параметры | `axis_key=1`, `axis_value=1`, `residual_length=128` |
+| Датасеты | `passage_retrieval_en`, `multifieldqa_en`, `multifieldqa_zh` |
+| Выборка | 40 примеров на датасет, фиксированный seed 2026 |
+| Промпты | Официальные шаблоны LongBench; без chat template, как в предыдущем проекте |
+| Длина входа | Максимум 16 384 токена, при необходимости сохраняются начало и конец |
+| Ответ | Greedy generation; максимум токенов из официального `dataset2maxlen.json` |
+| Метрики | Оригинальный `LongBench/metrics.py` |
+| Сравнение | Только **парные** примеры с одинаковыми токенами входа |
 
-**Important caveat:** LongBench's official reference inference code often truncates via decoded text when prompts exceed a model's context; our cap is applied on token IDs. We log original token count and truncation for every task. Therefore this pilot uses the official **datasets, prompt templates and evaluation metrics**, but its generation/truncation protocol is a **controlled custom adaptation**, not a byte-for-byte reproduction of an existing LongBench leaderboard run.
+Три датасета × три вида cache = **9 конфигураций**. На первом этапе каждая обрабатывает одни и те же 40 заданий своего датасета.
 
-### Expected outputs
+**Это исследовательский пилот, а не полный официальный результат LongBench.** Хотя используются оригинальные датасеты, шаблоны и метрики, у нас своя политика ограничения входа по token IDs. Показатели этого пилота нельзя напрямую выдавать за результаты официальной таблицы LongBench.
 
-- Per-example model outputs with identical `task_id` and `input_ids_sha256` for all cache configurations.
-- Official per-dataset scores (`results/summary/dataset_scores.csv`).
-- Paired quality changes in percentage points against Dynamic (`results/summary/paired_deltas.csv`).
-- A basic plot (`plots/pilot_scores.png`).
-- Timing and GPU peak allocation diagnostics for every example (not a dedicated performance benchmark).
+## Как запустить
 
-## Setup on HSE cluster (login node)
+Начать с **[инструкции для кластера](docs/cluster_first_run.md)**: там команды разделены на подготовку на Mac, действия на login-узле ВШЭ, проверки и первый Slurm-запуск.
 
-The examples below assume you cloned this repository to `~/kv-cache-longbench-pilot` and already have the `kvcache` conda environment and Qwen3-1.7B weights from the previous project. Run commands **in order, on the cluster login node**, unless otherwise noted.
+Общий порядок:
 
-```bash
-cd ~/kv-cache-longbench-pilot
-module load python
-conda activate kvcache
-python -m pip install -r requirements-extra.txt
+1. Клонировать **новый** репозиторий на login-узел.
+2. Использовать ранее настроенное Python-окружение `kvcache` и уже скачанные веса Qwen3-1.7B.
+3. Скачать оригинальный LongBench, зафиксировать commit и подготовить одинаковые задачи.
+4. Запустить три примера **только с DynamicCache**; проверить реальные ответы и журналы.
+5. Лишь после проверки запустить Slurm array с девятью ячейками.
+6. Подсчитать официальные метрики и построить графики.
 
-# Upstream LongBench is a separate dependency; its code/data are NOT vendored.
-git clone https://github.com/THUDM/LongBench.git external/LongBench
-# Record the version actually evaluated:
-git -C external/LongBench rev-parse HEAD
+Для короткого старта см. также `START_HERE.txt`.
 
-# Reuse EXISTING model weights; do not re-download the 1.7B model.
-source cluster.env.example
-ls "$MODEL_PATH/config.json"
+## Что записывается
 
-# Downloads the original official data.zip from Hugging Face (requires network).
-python -m src.download_data
+- `data/prepared/*.jsonl` — токенизированные задания с `task_id` и хешем входных токенов;
+- `data/prepared/manifest.json` — версия LongBench, параметры выборки, контрольная сумма архива;
+- `results/smoke/` — проверочные ответы DynamicCache;
+- `results/raw/` — ответы по каждой паре датасет/cache и время выполнения;
+- `results/summary/dataset_scores.csv` — баллы по датасетам;
+- `results/summary/paired_deltas.csv` — изменение относительно DynamicCache в процентных пунктах;
+- `plots/pilot_scores.png` — обзорный график.
+
+Сырые данные, датасеты и результаты в Git по умолчанию не коммитятся. Для полноценных научных выводов после пилота понадобится более крупная выборка и дополнительная валидация.
+
+## Содержание проекта
+
+```text
+src/download_data.py      Получение оригинального архива LongBench
+src/prepare_data.py       Выборка и токенизация одинаковых заданий
+src/run_quality.py        Генерация с DynamicCache и HQQ
+src/score.py              Официальные LongBench метрики и парные изменения
+src/plot.py               График по отдельным датасетам
+slurm/smoke.sbatch        Проверка трёх задач на GPU
+slurm/pilot.sbatch        Девять GPU-заданий полного пилота
+docs/cluster_first_run.md Пошаговые команды для кластера ВШЭ
+docs/research_plan.md     Исследовательский план
+docs/decisions.md         Зафиксированные методологические решения
+tests/                    Локальные тесты подготовки и анализа
 ```
 
-If outbound network is blocked from the login node, download/clone these upstream resources on your own computer and transfer the `data.zip` and `external/LongBench` directory to the cluster using your existing SCP workflow.
+## Ограничения и требования к интерпретации
 
-### First: 3-example Dynamic smoke test
+- Пилот на 40 заданиях — разведочный; указываем `n` и парные интервалы неопределённости.
+- Нельзя усреднять несопоставимые LongBench-метрики между разными датасетами.
+- Английские и китайские задания — **не переводные пары**. Разница не доказывает причинное влияние языка.
+- Ограничение 16K и усечение середины меняют часть оригинальных задач; долю усечённых примеров нужно показывать.
+- На Qwen3 оценка без chat template — осознанная экспериментальная настройка. Смена формата промпта должна быть отдельной серией.
+- Результаты времени относятся к stock HQQ на V100, batch size 1. Измерения при запуске quality — диагностические, не отдельный оптимизированный speed benchmark.
+- Выборки и входные токены должны совпадать между тремя вариантами cache; код анализа проверяет это и останавливается при расхождении.
 
-```bash
-cd ~/kv-cache-longbench-pilot
-source cluster.env.example
-python -m src.prepare_data --model "$MODEL_PATH" --n 5 --max-input-tokens 16384
-python -m unittest discover -s tests -v
-mkdir -p logs results/smoke results/raw results/summary
-sbatch --export=ALL,MODEL_PATH="$MODEL_PATH" slurm/smoke.sbatch
-```
+## Источники
 
-Check the job via `squeue -u "$USER"` and then inspect `logs/lb-smoke-<JOBID>.out`. The expected result is **three generated predictions and timings**. This verifies data prep, tokenizer, model forward, scoring inputs, and CUDA execution. Do not claim a benchmark result from three examples.
-
-### Then: 40 tasks × 3 datasets × 3 caches
-
-Only after inspecting smoke predictions:
-
-```bash
-cd ~/kv-cache-longbench-pilot
-source cluster.env.example
-python -m src.prepare_data --model "$MODEL_PATH" --n 40 --max-input-tokens 16384
-sbatch --export=ALL,MODEL_PATH="$MODEL_PATH" slurm/pilot.sbatch
-```
-
-This submits a Slurm array of **9 independent jobs** (`3 datasets × 3 caches`). Jobs write distinct JSONL files. Each job loads one model copy and processes its selected examples; `--resume` skips already saved IDs but checks their input hashes. Use `squeue -u "$USER"` to watch progress.
-
-### Analysis on login node (no GPU)
-
-Wait until **all 9 jobs** have succeeded. A partial matrix should intentionally trigger a paired-comparison error rather than quietly mix unequal task sets.
-
-```bash
-cd ~/kv-cache-longbench-pilot
-source cluster.env.example
-python -m src.score --longbench-code external/LongBench/LongBench
-python -m src.plot
-cat results/summary/dataset_scores.csv
-cat results/summary/paired_deltas.csv
-```
-
-### Verify before any scientific conclusion
-
-Read a few generated predictions for each cache and inspect: official score behavior, early stopping, prompt length, truncation frequency and Qwen3 thinking-marker artifacts. For the first paired trial, make sure DynamicCache performs reasonably; if not, investigate raw/chat formatting and generation before interpreting HQQ changes. Do **not** tune prompt formatting selectively for a cache — the same prompt must be used for all conditions.
-
-## Environment
-
-This scaffold deliberately reuses the *working* GPU environment from the prior project, instead of attempting to reinstall CUDA/PyTorch on the HPC cluster:
-
-- Python 3.11; torch 2.14.0+cu126; Transformers 5.17.0;
-- HQQ 0.2.8.post1; FP16 model weights;
-- additional upstream metric dependencies in `requirements-extra.txt`.
-
-Record `pip freeze`, `git -C external/LongBench rev-parse HEAD`, `nvidia-smi` and `data/prepared/manifest.json` along with any finalized experiment. Nothing under `data/raw/`, `data/prepared/`, or `results/raw/` is committed by default.
-
-## Repository layout
-
-```
-src/download_data.py      download official original LongBench data.zip
-src/prepare_data.py       fixed random subset and tokenized prompts
-src/run_quality.py        dynamic / HQQ generation; per-example diagnostics
-src/score.py              official LongBench metrics; paired bootstrap intervals
-src/plot.py               exploratory per-dataset chart
-slurm/smoke.sbatch        3 DynamicCache examples on GPU
-slurm/pilot.sbatch        9 Slurm jobs for first full pilot
-cluster.env.example      environment paths for HSE cluster
-docs/research_plan.md     follow-up experimental roadmap
-tests/                    offline unit tests
-```
-
-## Scientific limitations
-
-1. Pilot of 40 examples per dataset is exploratory; report n and paired uncertainty.
-2. Scores are **not** directly comparable across datasets with different metrics.
-3. English/Chinese datasets are not parallel translations. Different observed quality losses **do not establish a causal language effect**.
-4. Input is capped at 16K and some examples can be middle-truncated; report those counts.
-5. Tested quantization overhead is specific to stock HQQ path, V100 hardware and batch size 1.
-6. `DynamicCache` itself can perform poorly on some examples; always inspect and use paired changes.
-7. Raw prompts without Qwen chat template may not be optimal; any later chat-template variant must be a **separate** controlled experiment.
-8. A future cross-family comparison must establish cache API compatibility and architecture details first.
-
-## Upstream references
-
-- [LongBench (THUDM)](https://github.com/THUDM/LongBench) — original dataset, configs, and evaluation code.
-- Bai et al., [LongBench: A Bilingual, Multitask Benchmark for Long Context Understanding](https://aclanthology.org/2024.acl-long.172/), ACL 2024.
-- [LongBench dataset archive](https://huggingface.co/datasets/zai-org/LongBench).
-- [Transformers KV cache guide](https://huggingface.co/docs/transformers/v5.17.0/kv_cache).
+- [LongBench — официальный код](https://github.com/THUDM/LongBench)
+- [LongBench: A Bilingual, Multitask Benchmark for Long Context Understanding (ACL 2024)](https://aclanthology.org/2024.acl-long.172/)
+- [LongBench — данные](https://huggingface.co/datasets/zai-org/LongBench)
+- [Документация Transformers 5.17.0: KV Cache](https://huggingface.co/docs/transformers/v5.17.0/kv_cache)
