@@ -50,12 +50,21 @@ ls "$MODEL_PATH/config.json"
 
 **Остановись и пришли ошибку**, если `ws_find kv-cache` или `ls` не сработали. Не скачивай модель заново.
 
+Если обычный `import transformers` выполняется очень долго и ты прервал его через Ctrl+C, это не доказывает повреждение библиотеки. Проверь установленную версию без полного импорта:
+
+```bash
+python -c "from importlib.metadata import version; print('torch', version('torch')); print('transformers', version('transformers')); print('hqq', version('hqq'))"
+```
+
+Полный импорт потребуется позже при токенизации, и его нужно дождаться, если не появляется явная ошибка.
+
 ## 4. Подготовить LongBench без GPU
 
 На login-узле, внутри `~/kv-cache-longbench-pilot`:
 
 ```bash
 python -m pip install -r requirements-extra.txt
+mkdir -p external
 git clone https://github.com/THUDM/LongBench.git external/LongBench
 git -C external/LongBench rev-parse HEAD
 python -m src.download_data
