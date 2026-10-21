@@ -1,0 +1,15 @@
+# Models, datasets and raw results stay local / on scratch.
+data/raw/
+data/prepared/
+results/raw/
+results/smoke/
+plots/
+external/
+*.zip
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+cluster.env
+*.out
+*.err
