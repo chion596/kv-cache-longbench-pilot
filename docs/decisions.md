@@ -1,15 +1,27 @@
-# Methodology decisions, to revisit only in versioned experimental batches
+# Зафиксированные методологические решения
 
-- **Model**: Qwen3-1.7B, because earlier synthetic results showed non-ceiling/non-floor INT4 g64 exact retrieval (14/45) and model fits on one V100.
-- **Datasets**: official LongBench v1 archive. Do not train on LongBench test examples.
-- **Prompt**: official LongBench config files; no chat template in the first run to preserve continuity with earlier raw-prompt benchmark. Follow-up chat-template comparison is separately labeled.
-- **Metrics**: loaded from official `metrics.py`. No home-grown F1/retrieval replacements.
-- **Sample**: deterministic uniform sample of size 40, seed 2026. Selected sample IDs are shared across all configurations (fixed once).
-- **Input cap**: 16,384 tokens (mid-truncate); report frequency and original token lengths. Cap permits a feasible V100 pilot, but changes the task relative to full-length LongBench on any truncated example.
-- **Generation**: greedy, official max generated tokens per dataset, EOS stop. No temperature, sampling, beam search or hidden template changes.
-- **HQQ**: `backend=hqq`, `axis_key=axis_value=1`, `residual_length=128`, bitwidth=4, groups g16/g64. Dynamic baseline unquantized KV.
-- **Hardware**: one V100 per job, one model per job, batch size 1. 14B latency is deliberately excluded at this stage.
-- **Timing**: CUDA synchronized prefill and decode; incidental measurements during quality trials are diagnostics, not an optimized serving benchmark.
-- **Statistical summary**: per-dataset paired changes; percentile bootstrap over sampled instances is exploratory only. No causal claim about *language* from different EN/ZH questions.
+Здесь записаны решения **до** получения результатов. Не менять их по
+результатам удачных/неудачных прогонов без объявления новой серии.
 
-**Changes after seeing pilot results:** document new experimental batch/configuration before running it. Do not overwrite the original 40-task outputs when changing sample size, prompt policy, max length or model.
+- **Модель:** Qwen3-1.7B. В прошлом эксперименте на ней INT4 g64 имел
+  промежуточный exact retrieval 14/45 и модель помещалась на одну V100.
+- **Данные:** оригинальный LongBench v1; тестовые данные не используются для обучения.
+- **Промпты:** официальные шаблоны LongBench без chat template для сопоставления
+  с предыдущей raw-prompt постановкой. Chat template — отдельная будущая серия.
+- **Метрики:** оригинальный `metrics.py` LongBench, без замены своих F1/retrieval.
+- **Выборка:** 40 примеров на датасет, одинаковый seed 2026 для выбора индексов.
+- **Вход:** максимум 16 384 токена, при переполнении сохраняются начало и конец;
+  записывать исходную длину и факт усечения.
+- **Генерация:** greedy, официальный максимум длины ответа по датасету, EOS stop.
+- **HQQ:** `backend=hqq`, `axis_key=axis_value=1`,
+  `residual_length=128`, `nbits=4`, группы `g16/g64`.
+- **Baseline:** DynamicCache без квантизации.
+- **Железо:** одна V100 и одна модель на GPU, batch size 1.
+- **Время:** CUDA-синхронизация для диагностических prefill/decode measurements.
+  Это не отдельный оптимизированный benchmark inference serving.
+- **Статистика:** парные изменения внутри каждого датасета, пилотный bootstrap.
+  Различия английского/китайского сами по себе не доказывают причинное влияние языка.
+
+**После пилота:** любые изменения n, промптов, датасетов, модели, max length
+или настроек квантизации фиксировать как новую версию серии.
+Не перезаписывать исходные результаты пилота.
