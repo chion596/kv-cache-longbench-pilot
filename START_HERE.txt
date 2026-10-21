@@ -1,93 +1,23 @@
-KV CACHE LONGBENCH: КАК НАЧАТЬ
-============================
+KV CACHE + LONGBENCH: БЫСТРЫЙ СТАРТ
+====================================
 
-ЧТО ГОТОВО
------------
-Это отдельный проект с кодом для LongBench pilot, тестами и Slurm.
-Настоящих результатов LongBench пока нет: запуск на V100 ещё НЕ выполнялся.
+Репозиторий ПУБЛИЧНЫЙ. Это отдельный проект, продолжение предыдущего
+исследования Qwen3 KV Cache. GPU-эксперименты пока не выполнялись.
 
-ЧАСТЬ A. СОЗДАТЬ НОВЫЙ ПРИВАТНЫЙ РЕПОЗИТОРИЙ (на GitHub)
---------------------------------------------------------
-1. Открой https://github.com/new
-2. Owner: chion596 (если это твой текущий аккаунт).
-3. Name: kv-cache-longbench-pilot
-4. Visibility: Private.
-5. НЕ добавляй README/.gitignore/license автоматически: они уже находятся в ZIP.
-6. Нажми Create repository.
+Главная инструкция с командами:
+  docs/cluster_first_run.md
 
-ЧАСТЬ B. ВЫЛОЖИТЬ ПРОЕКТ (на твоём компьютере в терминале)
----------------------------------------------------------
-Распакуй ZIP, открой терминал в папке kv-cache-longbench-pilot.
-Дальше последовательно:
+ПОРЯДОК РАБОТЫ:
+1. На Mac: git pull --ff-only origin main
+2. Подключись к login-узлу кластера ВШЭ через ранее рабочий SSH.
+3. На login-узле: клонируй этот репозиторий.
+4. Активируй уже существующее conda-окружение kvcache.
+5. Убедись, что локальные веса Qwen3-1.7B доступны по MODEL_PATH.
+6. Скачай официальный LongBench и подготовь тестовую выборку.
+7. Проверь unit tests и запусти ТОЛЬКО Slurm smoke.
+8. Принеси результаты smoke на проверку, прежде чем запускать 9 jobs.
 
-git init -b main
-git add .
-git commit -m "Initial LongBench KV-cache pilot scaffold"
-git remote add origin git@github.com:chion596/kv-cache-longbench-pilot.git
-git push -u origin main
+Важно: не коммить скачанные датасеты, веса моделей, секреты или токены.
+Не запускай скрипты GPU прямо на login-узле.
 
-Если GitHub SSH не настроен, используй HTTPS remote:
-  git remote set-url origin https://github.com/chion596/kv-cache-longbench-pilot.git
-  git push -u origin main
-GitHub может запросить авторизацию. НЕ присылай токены/пароли в чат.
-
-ЧАСТЬ C. ПОДГОТОВКА КЛАСТЕРА ВШЭ (на login-узле)
------------------------------------------------
-Открой свой обычный SSH-сеанс к кластеру ВШЭ. Выполняй по порядку:
-
-cd ~
-git clone git@github.com:chion596/kv-cache-longbench-pilot.git
-cd kv-cache-longbench-pilot
-module load python
-conda activate kvcache
-python -m pip install -r requirements-extra.txt
-
-git clone https://github.com/THUDM/LongBench.git external/LongBench
-git -C external/LongBench rev-parse HEAD
-source cluster.env.example
-ls "$MODEL_PATH/config.json"
-python -m src.download_data
-
-Если MODEL_PATH или git clone на кластере не работает — остановись
-и покажи мне текст ошибки, не меняй экспериментальные настройки наугад.
-
-ЧАСТЬ D. МАЛЕНЬКИЙ ПРОВЕРОЧНЫЙ ЗАПУСК (на login-узле)
-----------------------------------------------------
-cd ~/kv-cache-longbench-pilot
-source cluster.env.example
-python -m src.prepare_data --model "$MODEL_PATH" --n 5 --max-input-tokens 16384
-python -m unittest discover -s tests -v
-mkdir -p logs results/smoke results/raw results/summary
-sbatch --export=ALL,MODEL_PATH="$MODEL_PATH" slurm/smoke.sbatch
-
-Следи за job:
-  squeue -u "$USER"
-После завершения открой stdout из logs/lb-smoke-<jobid>.out.
-Убедись, что в файле есть три ответа модели.
-
-ЧАСТЬ E. ПИЛОТ (ТОЛЬКО ПОСЛЕ ПРОВЕРКИ SMOKE)
---------------------------------------------
-cd ~/kv-cache-longbench-pilot
-source cluster.env.example
-python -m src.prepare_data --model "$MODEL_PATH" --n 40 --max-input-tokens 16384
-sbatch --export=ALL,MODEL_PATH="$MODEL_PATH" slurm/pilot.sbatch
-
-Это Slurm array из 9 job: 3 датасета x 3 типа cache.
-
-ЧАСТЬ F. АНАЛИЗ (после завершения ВСЕХ 9 job, login-узел)
-----------------------------------------------------------
-cd ~/kv-cache-longbench-pilot
-source cluster.env.example
-python -m src.score --longbench-code external/LongBench/LongBench
-python -m src.plot
-cat results/summary/dataset_scores.csv
-cat results/summary/paired_deltas.csv
-
-Измерения n=40 — пилотные, не итоговая оценка LongBench.
-Для обсуждения результатов сохрани logs, manifest и несколько примеров pred.
-
-ЕСЛИ СТАРЫЙ SCRATCH НЕ НАЙДЕН
-----------------------------
-Команда в cluster.env.example использует уже существующую workspace
-"kv-cache". Если "ws_find kv-cache" не срабатывает, остановись;
-нужно уточнить актуальное расположение модели, а не скачивать её заново.
+Подробнее: docs/cluster_first_run.md
