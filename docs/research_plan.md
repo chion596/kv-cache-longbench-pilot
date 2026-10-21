@@ -1,59 +1,64 @@
-# Research roadmap (new project)
+# План продолжения исследования KV Cache
 
-## Why a new repository?
+## Почему создан отдельный репозиторий
 
-Keep previous synthetic study (its datasets, canonical tables and plots) immutable. This repository isolates new benchmark implementations, long-context prompts, cross-language and cross-family design, and later method development.
+Предыдущий проект с синтетическим passkey retrieval завершён и остаётся
+самостоятельной воспроизводимой работой. Здесь проверяем, как его результаты
+переносятся на стандартные задачи LongBench, другие семейства моделей и языки.
 
-## Stage 0 — replication of the previous code path
+## Этап 0. Воспроизведение прежней настройки
 
-- Use working Qwen3-1.7B weights on a V100, FP16 weights, batch=1.
-- Reuse same HQQ parameters and direct `model(..., past_key_values=cache)` code path.
-- Fix dataset sample IDs, tokenized prompts and tokenizer hash before running treatments.
-- Confirm Dynamic smoke works, including sensible nonempty textual answers; inspect truncation artifacts.
+- Qwen3-1.7B, FP16-веса, batch size 1, V100.
+- Тот же stock HQQ QuantizedCache из Transformers.
+- Фиксированные входные токены и хеши для всех конфигураций.
+- DynamicCache smoke на нескольких реальных заданиях LongBench.
 
-**Gate:** no scientific evaluation until Dynamic succeeds end-to-end on a small sample.
+**Критерий перехода:** DynamicCache даёт разумные ответы и весь pipeline работает.
 
-## Stage 1 — LongBench v1 small controlled pilot
+## Этап 1. Пилот LongBench v1
 
-- `passage_retrieval_en`: closest to synthetic recall; official retrieval_score.
-- `multifieldqa_en`: English natural document QA; official qa_f1_score.
-- `multifieldqa_zh`: Chinese document QA; official qa_f1_zh_score.
-- 40 randomly sampled instances per dataset, fixed seed 2026; Dynamic vs INT4 g16/g64.
-- Cap at 16K input tokens; preserve original lengths, truncation flag, prompt hashes.
-- Pair scores by identical task ID and token hash.
+- `passage_retrieval_en`: извлечение информации в английском тексте.
+- `multifieldqa_en`: вопросы к документам на английском.
+- `multifieldqa_zh`: вопросы к документам на китайском.
+- 40 случайно выбранных задач на датасет, seed 2026.
+- DynamicCache vs INT4 g16 vs INT4 g64.
+- Максимум 16K входных токенов; сохраняем длины и факт усечения.
+- Сравниваем парные изменения оценки на одинаковых примерах.
 
-**Gate:** determine whether the quality gap is visible for any dataset, and whether Dynamic is comfortably above floor.
+**Критерий перехода:** DynamicCache не находится у пола качества и разницу
+между cache-конфигурациями можно интерпретировать.
 
-## Stage 2 — increased power + group size
+## Этап 2. Увеличение выборки и q_group_size
 
-- Increase n (or evaluate whole chosen subsets).
-- Add INT4 g32/g128 only where results are informative.
-- Report paired example-level deltas + bootstrap uncertainty and context-length bins.
-- Re-run any anomalous cells on new examples; do not repeatedly select only convenient tasks.
-- Measure full GPU/latency tradeoff on selected long contexts after quality validation.
+- Увеличить n либо взять все доступные примеры выбранных датасетов.
+- Добавить INT4 g32/g128 там, где это информативно.
+- Посчитать парные изменения и bootstrap-интервалы по примерам.
+- Разделить результаты по длине контекста и доле усечения.
+- При необходимости отдельно измерить quality–memory–latency trade-off.
 
-## Stage 3 — independent model family
+## Этап 3. Другая архитектурная семья моделей
 
-- Choose an **architecturally different** model with feasible V100 memory/context/KV API.
-- Define matching size range and same LongBench instances.
-- Control max prompt length, prompt formatting and quantization settings.
-- Compare within-model Dynamic→INT4 degradation. Absolute baseline score is not directly model-family effect.
-- DeepSeek-R1-Distill-Qwen is Qwen-based (not an independent architecture); confirm the backbone before labeling family.
+Подобрать модель, помещающуюся на V100 и поддерживающую выбранный KV-cache API.
+Сравнивать относительное падение от Dynamic к INT4, а не абсолютные баллы
+разных моделей. DeepSeek-R1-Distill-Qwen — Qwen-базированная модель, поэтому
+не является независимым архитектурным семейством.
 
-## Stage 4 — language
+## Этап 4. Язык
 
-- First compare English and Chinese subsets **descriptively** using within-dataset deltas.
-- For a proper language-controlled study create/curate parallel English–Chinese tasks with matched facts and controlled token-length distributions.
-- Investigate tokenizer tokenization density as a possible confound.
+Сначала сделать описательное сравнение английских и китайских датасетов.
+Оно не доказывает влияние языка, потому что вопросы разные. В дальнейшем —
+парные переводные задания с контролем длины токенизации.
 
-## Candidate next mechanism work
+## Возможная новая методика
 
-Locate quantization sensitivity by layers, heads, and K/V tensor; evaluate smaller groups selectively in sensitive layers while retaining g64 for others. Target: quality close to INT4 g16 with memory closer to g64.
+Выяснить, какие слои и какие K/V-тензоры чувствительны к `q_group_size`,
+после чего попробовать mixed-precision или adaptive group-size cache:
+качество ближе к g16 при памяти ближе к g64.
 
-## A useful first research update to the supervisor
+## Отчёт научруку после первого пилота
 
-1. A brief protocol and version/hash manifest.
-2. A table of three datasets x three cache settings with exact n and official metric.
-3. Paired deltas and examples of failures; no cross-dataset score averages.
-4. What differs from earlier synthetic results, and likely alternative explanations.
-5. Proposed next hypothesis, with explicit rejection criteria.
+1. Точное описание протокола, версии библиотек и хешей данных.
+2. Таблица 3 датасета × 3 cache, по одному n и метрике на датасет.
+3. Парные изменения качества относительно Dynamic и примеры ошибок.
+4. Ограничения сравнения с прежней синтетикой.
+5. Одна следующая гипотеза, которую можно проверить или отвергнуть.
