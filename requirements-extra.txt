@@ -1,5 +1,5 @@
-# Install inside the pre-existing kvcache conda environment (torch/transformers/HQQ already pinned).
-# LongBench upstream metrics.py imports all of these even when only QA/retrieval are scored.
+# Дополнительные зависимости оригинальных метрик LongBench.
+# Устанавливать в УЖЕ существующее окружение kvcache с torch/Transformers/HQQ.
 jieba==0.42.1
 fuzzywuzzy==0.18.0
 rouge==1.0.1
