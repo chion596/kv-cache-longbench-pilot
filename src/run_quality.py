@@ -14,15 +14,19 @@ import os
 import time
 from pathlib import Path
 
-from src.common import CACHES, digest_ids, read_jsonl
+from src.common import digest_ids, read_jsonl
+
+# Варианты для генерации. src.common.CACHES содержит только исходные три
+# конфигурации: не меняем старую пилотную матрицу и её анализ.
+GENERATION_CACHES = ("dynamic", "int4_g16", "int4_g32", "int4_g64", "int4_g128")
 
 
 def make_cache(model, cache_name: str, residual_length: int):
     from transformers import DynamicCache, QuantizedCache
     if cache_name == "dynamic":
         return DynamicCache(config=model.config)
-    if cache_name in ("int4_g16", "int4_g64"):
-        group = 16 if cache_name.endswith("16") else 64
+    if cache_name in ("int4_g16", "int4_g32", "int4_g64", "int4_g128"):
+        group = int(cache_name.split("_g", maxsplit=1)[1])
         return QuantizedCache(backend="hqq", config=model.config, nbits=4,
                               axis_key=1, axis_value=1, q_group_size=group,
                               residual_length=residual_length)
@@ -105,7 +109,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True, help="Local path to Qwen3-1.7B model")
     parser.add_argument("--tasks", required=True, help="Prepared dataset JSONL")
-    parser.add_argument("--cache", required=True, choices=CACHES)
+    parser.add_argument("--cache", required=True, choices=GENERATION_CACHES)
     parser.add_argument("--out", required=True)
     parser.add_argument("--limit", type=int, default=0, help="Smoke test: only first N prepared tasks")
     parser.add_argument("--residual-length", type=int, default=128)
