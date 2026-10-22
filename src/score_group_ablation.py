@@ -165,11 +165,24 @@ def main():
     for row in datasets:
         print(f"{row['dataset']:22} {row['cache']:11} n={row['n']} "
               f"score={row['score_pct']:.2f}%")
-    print("\nПрямые парные контрасты g16→g32/g64/g128:")
+    print("\nПрямые парные контрасты относительно g16:")
     for row in comparisons:
         if row["reference"] != "int4_g16":
             continue
         print(f"{row['dataset']}: {row['candidate']} − g16 = "
+              f"{row['delta_pp']:+.2f} п.п., "
+              f"95% bootstrap [{row['bootstrap_95_low_pp']:+.2f}; "
+              f"{row['bootstrap_95_high_pp']:+.2f}]")
+    print("\nСоседние группы: g16→g32, g32→g64, g64→g128:")
+    adjacent = {
+        ("int4_g16", "int4_g32"),
+        ("int4_g32", "int4_g64"),
+        ("int4_g64", "int4_g128"),
+    }
+    for row in comparisons:
+        if (row["reference"], row["candidate"]) not in adjacent:
+            continue
+        print(f"{row['dataset']}: {row['candidate']} − {row['reference']} = "
               f"{row['delta_pp']:+.2f} п.п., "
               f"95% bootstrap [{row['bootstrap_95_low_pp']:+.2f}; "
               f"{row['bootstrap_95_high_pp']:+.2f}]")
