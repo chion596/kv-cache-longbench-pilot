@@ -1,8 +1,10 @@
-# Models, datasets and raw results stay local / on scratch.
+# Скачанные датасеты, подготовленные входы, результаты и артефакты не коммитим.
 data/raw/
 data/prepared/
 results/raw/
 results/smoke/
+results/summary/
+results/diagnostics/
 plots/
 external/
 *.zip
