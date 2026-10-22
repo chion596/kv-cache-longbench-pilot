@@ -39,10 +39,70 @@ SmolLM3-3B с тремя cache-конфигурациями подтвержде
 ещё не анализировались. Три задачи — это smoke test,
 а не свидетельство улучшения/деградации качества модели.
 
-Следующий шаг: вывести эталоны, предсказания и оценки
-`src.check_smoke` отдельно для каждого cache и убедиться,
-что Dynamic выдаёт осмысленные ответы, прежде чем
-масштабировать серию.
+**Smoke test по официальному `retrieval_score` также прошёл.**
+Все три конфигурации правильно ответили на все три задания:
+
+| Задание | Эталон | Dynamic | INT4 g16 | INT4 g64 |
+|---|---|---|---|---|
+| passage_retrieval_en:5 | Paragraph 3 | `3.` (100%) | `3.` (100%) | `3` (100%) |
+| passage_retrieval_en:6 | Paragraph 24 | `24.` (100%) | `24.` (100%) | `24.` (100%) |
+| passage_retrieval_en:9 | Paragraph 12 | `12.` (100%) | `12.` (100%) | `12.` (100%) |
+
+Длины входов: 12 103, 11 767 и 14 096 токенов. В отличие
+от наблюдавшихся на Qwen3-1.7B длинных повторяющихся продолжений,
+в этих трёх заданиях SmolLM3-3B выдаёт краткие ответы.
+При этом **3/3 недостаточно**, чтобы делать вывод об устойчивости
+к group size или об абсолютном качестве модели на LongBench.
+
+Следующая серия: по 80 **тех же исходных задач** `passage_retrieval_en`
+для Dynamic/g16/g64. Не смешивать эти 240 генераций со smoke-файлами,
+сохранёнными отдельно. Готовы `slurm/smollm3_retrieval80.sbatch`
+и `src/score_family_retrieval.py`, который проверит идентичность
+входов, посчитает парные разницы с интервалами и длину генерации.
+
+## Следующий запуск: 80 retrieval-заданий
+
+В login shell кластера:
+
+```bash
+cd ~/kv-cache-longbench-pilot
+git pull --ff-only
+source cluster.env.example
+export OTHER_MODEL_PATH="$(ws_find kv-cache)/models/SmolLM3-3B"
+python -m unittest discover -s tests -v
+wc -l data/prepared/families/smollm3-3b/passage_retrieval_en.jsonl
+```
+
+Если unit tests завершились `OK` и подготовлено ровно 80
+заданий, запускать первую серию:
+
+```bash
+mkdir -p logs results/families/smollm3-3b/retrieval80
+sbatch --array=0,1,3%2 --export=ALL,OTHER_MODEL_PATH="$OTHER_MODEL_PATH" \
+  slurm/smollm3_retrieval80.sbatch
+```
+
+Массив использует нумерацию `0=Dynamic`, `1=g16`,
+`2=g32`, `3=g64`, `4=g128`, но первый запуск включает
+**только** `0,1,3`. Максимум две одновременно используемые GPU.
+
+После завершения всех трёх Slurm-задач (`COMPLETED 0:0`):
+
+```bash
+wc -l results/families/smollm3-3b/retrieval80/*.jsonl
+python -m src.score_family_retrieval
+```
+
+Ожидаются три файла по 80 ответов. Официальная метрика
+сравнивается попарно на одинаковых задачах. Скрипт напечатает
+качество, долю нулевых баллов, частоту достижения предела длины
+и парный bootstrap-интервал для g16−g64.
+
+**Решение по расширению:** если результаты информативны,
+на тех же входах добавим g32 и g128 (`--array=2,4%2`),
+а затем отдельно проверим `multifieldqa_en`. Китайский QA
+не стоит запускать большой серией без sanity-check baseline.
+
 
 Параллельно статус запроса доступа к Meta Llama 3.2 на Hugging Face:
 **PENDING**. Это значит, что разрешения на скачивание весов Llama
