@@ -29,6 +29,14 @@ def make_cache(model, cache_name: str, residual_length: int):
     raise ValueError(cache_name)
 
 
+def effective_generation_limit(task_max_new_tokens: int, override: int | None) -> int:
+    """Вернуть длину генерации для отдельной контрольной серии."""
+    limit = task_max_new_tokens if override is None else override
+    if limit < 1:
+        raise ValueError("Число генерируемых токенов должно быть >= 1")
+    return limit
+
+
 def eos_ids_for(tokenizer, model):
     ids = set()
     for value in (tokenizer.eos_token_id, getattr(model.generation_config, "eos_token_id", None)):
@@ -101,6 +109,8 @@ def main():
     parser.add_argument("--out", required=True)
     parser.add_argument("--limit", type=int, default=0, help="Smoke test: only first N prepared tasks")
     parser.add_argument("--residual-length", type=int, default=128)
+    parser.add_argument("--max-new-tokens-override", type=int, default=None,
+                        help="Предел генерации в контрольной серии, не меняет подготовленные входы")
     parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
 
@@ -112,6 +122,8 @@ def main():
         raise RuntimeError("CUDA GPU required. Run through Slurm on the HSE cluster.")
     if args.residual_length < 1:
         parser.error("--residual-length must be >=1")
+    if args.max_new_tokens_override is not None and args.max_new_tokens_override < 1:
+        parser.error("--max-new-tokens-override должен быть >=1")
     tasks = list(read_jsonl(args.tasks))
     if args.limit:
         tasks = tasks[:args.limit]
@@ -139,8 +151,12 @@ def main():
     with out.open("a", encoding="utf-8") as output_file:
         for j, task in enumerate(tasks, 1):
             task_id = task["task_id"]
+            output_limit = effective_generation_limit(task["max_new_tokens"], args.max_new_tokens_override)
             if task_id in completed:
-                if completed[task_id].get("cache") != args.cache or completed[task_id].get("model") != str(args.model) or completed[task_id].get("residual_length") != args.residual_length:
+                if (completed[task_id].get("cache") != args.cache
+                        or completed[task_id].get("model") != str(args.model)
+                        or completed[task_id].get("residual_length") != args.residual_length
+                        or completed[task_id].get("max_new_tokens") != output_limit):
                     raise ValueError(f"Resume configuration mismatch: {task_id}")
                 if completed[task_id]["input_ids_sha256"] != task["input_ids_sha256"]:
                     raise ValueError(f"Resume task hash mismatch: {task_id}")
@@ -152,13 +168,14 @@ def main():
             torch.cuda.empty_cache()
             pred, timing = greedy_generate(
                 model, tokenizer, task["input_ids"], args.cache,
-                args.residual_length, task["max_new_tokens"]
+                args.residual_length, output_limit
             )
             record = {k: task[k] for k in (
                 "task_id", "dataset", "source_index", "source_id", "language", "answers",
                 "all_classes", "longbench_length", "full_prompt_tokens", "input_tokens",
                 "middle_truncated", "input_ids_sha256", "max_new_tokens"
             )}
+            record["max_new_tokens"] = output_limit
             record.update({"pred": pred, "cache": args.cache, "model": str(args.model),
                            "gpu": gpu_name, "transformers": transformers.__version__,
                            "torch": torch.__version__, "residual_length": args.residual_length,
