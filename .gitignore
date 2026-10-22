@@ -1,10 +1,7 @@
-# Скачанные датасеты, подготовленные входы, результаты и артефакты не коммитим.
+# Не публиковать скачанные данные, промпты, ответы, логи и результаты GPU.
 data/raw/
 data/prepared/
-results/raw/
-results/smoke/
-results/summary/
-results/diagnostics/
+results/
 plots/
 external/
 *.zip
