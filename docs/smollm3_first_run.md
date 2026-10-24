@@ -60,6 +60,50 @@ SmolLM3-3B с тремя cache-конфигурациями подтвержде
 и `src/score_family_retrieval.py`, который проверит идентичность
 входов, посчитает парные разницы с интервалами и длину генерации.
 
+## Результаты полного retrieval-прогона (24 октября 2026)
+
+Три файла по 80 ответов получены, проверка
+`python -m src.score_family_retrieval` выполнена успешно:
+
+- Dynamic: **93.750%**, 5/80 нулевых, 7/80 достигли лимита,
+  средняя длина 5.8 токенов.
+- INT4 g16: **93.750%**, 5/80 нулевых, 6/80 достигли лимита,
+  средняя длина 5.2 токена.
+- INT4 g64: **93.125%**, 5/80 нулевых, 8/80 достигли лимита,
+  средняя длина 6.5 токенов.
+- Разница g64 − g16: **−0.625 п.п.**,
+  95% парный bootstrap **[−1.875; 0.000]** п.п.
+
+Поэтому ожидавшаяся по Qwen3-1.7B серьёзная деградация
+при g64 на SmolLM3-3B **не проявилась**.
+Это сильное различие в наблюдаемом поведении моделей,
+но не идентификация влияния одной архитектуры
+(разные размеры, обучение и токенизация).
+
+См. [полный разбор результатов](smollm3_retrieval80_results.md).
+
+Чтобы достроить group-size curve без повторения уже завершённых
+240 генераций, запускаем **только** индексы g32/g128:
+
+```bash
+cd ~/kv-cache-longbench-pilot
+git pull --ff-only
+source cluster.env.example
+export OTHER_MODEL_PATH="$(ws_find kv-cache)/models/SmolLM3-3B"
+mkdir -p logs results/families/smollm3-3b/retrieval80
+sbatch --array=2,4%2 \
+  --export=ALL,OTHER_MODEL_PATH="$OTHER_MODEL_PATH" \
+  slurm/smollm3_retrieval80.sbatch
+```
+
+После завершения:
+
+```bash
+wc -l results/families/smollm3-3b/retrieval80/*.jsonl
+python -m src.score_family_retrieval \
+  --caches dynamic int4_g16 int4_g32 int4_g64 int4_g128
+```
+
 ## Следующий запуск: 80 retrieval-заданий
 
 В login shell кластера:
