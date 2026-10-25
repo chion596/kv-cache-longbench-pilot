@@ -1,5 +1,69 @@
 # Смежная архитектура без одобрения Meta: SmolLM3-3B
 
+## Статус на 25 октября: все пять групп завершены
+
+Полный результат на `passage_retrieval_en`: 80 одинаковых исходных
+заданий × Dynamic, g16, g32, g64 и g128 = **400 генераций**.
+Официальные баллы соответственно **93.750 / 93.750 / 92.500 /
+93.125 / 92.500%**. Разности с Dynamic в SmolLM3
+невелики и их парные bootstrap-интервалы включают ноль.
+На Qwen3-1.7B в той же выборке оценки резко падали при g64/g128.
+
+[Полный отчёт, протокол и ограничения](smollm3_retrieval80_results.md).
+
+Следующий эксперимент не повторяет retrieval: проверяем
+переносимость на **`multifieldqa_en`**, поскольку короткий
+числовой ответ retrieval может скрывать деградацию текста.
+
+### Быстрая диагностика без GPU
+
+```bash
+cd ~/kv-cache-longbench-pilot
+git pull --ff-only
+source cluster.env.example
+python -m unittest discover -s tests -v
+python -m src.diagnose_family_retrieval
+```
+
+Диагностика сравнивает Qwen3 и SmolLM3 на совпадающих
+`source_index`, но НЕ требует совпадения token IDs между
+моделями. Она показывает первое число, лишние числа в ответе,
+достижение лимита, ошибки отдельных задач и экономию
+`peak_gpu_gib` относительно Dynamic в каждой модели.
+Это позволяет уточнить, чем объясняется разница официального
+`retrieval_score`.
+
+### Следующий GPU-запуск: QA sanity check, 8 задач × 3 cache
+
+```bash
+cd ~/kv-cache-longbench-pilot
+git pull --ff-only
+source cluster.env.example
+export OTHER_MODEL_PATH="$(ws_find kv-cache)/models/SmolLM3-3B"
+wc -l data/prepared/families/smollm3-3b/multifieldqa_en.jsonl
+mkdir -p logs results/families/smollm3-3b/qa_en_smoke
+sbatch --export=ALL,OTHER_MODEL_PATH="$OTHER_MODEL_PATH" \
+  slurm/smollm3_qa_en_smoke.sbatch
+```
+
+Ожидаются **80 подготовленных** QA-строк и **три по 8**
+записей после успешного завершения Slurm array.
+
+Затем на login-узле:
+
+```bash
+wc -l results/families/smollm3-3b/qa_en_smoke/*.jsonl
+python -m src.check_smoke \
+  results/families/smollm3-3b/qa_en_smoke/*.jsonl
+```
+
+Это **не статистический результат**: всего восемь первых
+QA-заданий, не отдельная случайная выборка. Цель — изучить
+правдоподобие Dynamic baseline и ответы raw LongBench,
+до запуска 80 задач. Скрипт `src.score_family_qa` уже
+подготовлен для последующей полноценной QA-матрицы.
+Пока не стоит выполнять её до анализа smoke.
+
 ## Почему изменили порядок
 
 При попытке загрузить `meta-llama/Llama-3.2-1B-Instruct`
