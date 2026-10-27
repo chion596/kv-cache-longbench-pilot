@@ -131,6 +131,8 @@ def main():
                         default="results/families/smollm3-3b/summary")
     parser.add_argument("--longbench-code", default="external/LongBench/LongBench")
     parser.add_argument("--expected-n", type=int, default=80)
+    parser.add_argument("--label", default="SmolLM3-3B",
+                        help="Подпись семейства модели в отчёте")
     parser.add_argument("--caches", nargs="+",
                         default=["dynamic", "int4_g16", "int4_g64"],
                         choices=ALLOWED_CACHES)
@@ -143,7 +145,7 @@ def main():
     write_csv(out / "retrieval_scores.csv", summaries)
     write_csv(out / "retrieval_pairs.csv", contrasts)
 
-    print("SmolLM3-3B, passage_retrieval_en:")
+    print(f"{args.label}, passage_retrieval_en:")
     for row in summaries:
         print(f"{row['cache']:11} качество={row['quality_pct']:6.2f}%, "
               f"нулевых={row['zero_score_count']}/{row['n']}, "
