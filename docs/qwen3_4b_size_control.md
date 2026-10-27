@@ -1,0 +1,135 @@
+# Контроль масштаба: Qwen3-4B на той же LongBench retrieval-выборке
+
+Дата подготовки: 27 октября 2026 года.
+
+## Зачем это нужно
+
+Сейчас наблюдаем на 80 совпадающих исходных LongBench-заданиях:
+
+| Кэш | Qwen3-1.7B | SmolLM3-3B |
+|---|---:|---:|
+| Dynamic | 80.625% | 93.750% |
+| INT4 g16 | 78.271% | 93.750% |
+| INT4 g64 | 39.512% | 93.125% |
+| g64−Dynamic | −41.113 п.п. | −0.625 п.п. |
+
+Различия могут быть связаны с семейством, размером модели,
+архитектурными конфигурациями, обучением, tokenizer
+и стилем генерации. Qwen3-4B позволяет проверить,
+воспроизводится ли падение **внутри Qwen3** при
+увеличении размера с 1.7B до 4B. Это не изолирует
+влияние числа параметров причинным образом, но
+снижает неоднородность сравнений.
+
+Модель Qwen3-4B ранее уже была скачана в
+`$(ws_find kv-cache)/models/Qwen3-4B`. Сначала
+проверить реальную целостность; папка могла содержать
+неполные загрузки. **Не скачивать заново**, если
+все веса уже присутствуют. До нового запуска
+ничего из workspace не удалять.
+
+## Подготовка только на login-узле
+
+```bash
+cd ~/kv-cache-longbench-pilot
+git pull --ff-only
+source cluster.env.example
+export QWEN4_MODEL_PATH="$(ws_find kv-cache)/models/Qwen3-4B"
+
+test -f "$QWEN4_MODEL_PATH/config.json"
+test -f "$QWEN4_MODEL_PATH/model.safetensors.index.json" \
+  || test -f "$QWEN4_MODEL_PATH/model.safetensors"
+du -sh "$QWEN4_MODEL_PATH"
+python -m unittest discover -s tests -v
+```
+
+Подготовить ту же held-out выборку по сохранённым
+`source_index`, теперь с tokenizer Qwen3-4B:
+
+```bash
+python -m src.prepare_family_model \
+  --model "$QWEN4_MODEL_PATH" \
+  --name qwen3-4b
+wc -l data/prepared/families/qwen3-4b/*.jsonl
+```
+
+В `manifest.json` должны остаться ссылки на
+80 исходных задач каждого из трёх датасетов,
+а сами token IDs/hashes соответствовать Qwen3-4B.
+Повторять подготовку при существующей директории нельзя:
+утилита намеренно запрещает перезапись.
+
+## Smoke test: 3 retrieval × Dynamic/g16/g64
+
+```bash
+mkdir -p logs results/families/qwen3-4b/smoke
+sbatch --export=ALL,QWEN4_MODEL_PATH="$QWEN4_MODEL_PATH" \
+  slurm/qwen3_4b_family_smoke.sbatch
+```
+
+После успешного `COMPLETED 0:0` для всех трёх задач:
+
+```bash
+wc -l results/families/qwen3-4b/smoke/*.jsonl
+python -m src.check_smoke \
+  results/families/qwen3-4b/smoke/*.jsonl
+```
+
+Ожидаем три файла по три записи. Цель smoke —
+проверить совместимость Qwen3-4B c HQQ-кэшем,
+память V100 32GB и поведение генерации,
+а не собрать репрезентативную метрику.
+
+## Полный запуск — только после успешного smoke
+
+Скрипт уже есть в `slurm/qwen3_4b_retrieval80.sbatch`,
+но **не запускать его** до проверки smoke.
+
+Если smoke успешен, команда:
+
+```bash
+mkdir -p logs results/families/qwen3-4b/retrieval80
+
+sbatch --export=ALL,QWEN4_MODEL_PATH="$QWEN4_MODEL_PATH" \
+  slurm/qwen3_4b_retrieval80.sbatch
+```
+
+80 заданий × Dynamic/g16/g64 = 240 генераций.
+Выходы отделены от SmolLM3 и Qwen3-1.7B.
+
+После завершения:
+
+```bash
+wc -l results/families/qwen3-4b/retrieval80/*.jsonl
+python -m src.score_family_retrieval \
+  --label Qwen3-4B \
+  --results-dir results/families/qwen3-4b/retrieval80 \
+  --out-dir results/families/qwen3-4b/summary \
+  --caches dynamic int4_g16 int4_g64
+```
+
+При сравнении с 1.7B интерпретировать прежде всего
+**внутримодельную разность g64−Dynamic**, а не
+абсолютные accuracy. Дополнительно описать
+длину генерации, лимит токенов, входные длины
+и долю испорченных первых чисел — иначе
+нельзя отделить retrieval от повторяющихся продолжений.
+
+## Планируемый научный контраст
+
+- Если у Qwen3-4B g64 сильно ухудшает качество,
+  возможна чувствительность семейства и его
+  отдельных конфигураций независимо от
+  точного значения параметров (но эффект масштаба
+  всё равно не исключён).
+- Если Qwen3-4B сохраняет качество,
+  это поддерживает гипотезу о зависимости
+  от параметров/обучения/конфигурации даже
+  внутри одного семейства.
+- Ни один исход **сам по себе** не доказывает
+  причинный механизм. Для него нужны
+  контролируемые замеры ошибок K/V по слоям
+  и/или одинаковый decode protocol.
+
+Сырые JSONL хранятся на кластере и должны
+резервно копироваться отдельно от GitHub.
