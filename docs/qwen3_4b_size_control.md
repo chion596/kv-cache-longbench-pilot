@@ -140,6 +140,10 @@ python -m src.score_family_retrieval \
   --results-dir results/families/qwen3-4b/retrieval80 \
   --out-dir results/families/qwen3-4b/summary \
   --caches dynamic int4_g16 int4_g64
+
+python -m src.diagnose_single_retrieval \
+  --label Qwen3-4B \
+  --results-dir results/families/qwen3-4b/retrieval80
 ```
 
 При сравнении с 1.7B интерпретировать прежде всего
