@@ -52,28 +52,55 @@ def eos_ids_for(tokenizer, model):
 
 
 def greedy_generate(model, tokenizer, prompt_ids, cache_name: str, residual_length: int,
-                    max_new_tokens: int):
+                    max_new_tokens: int, *, prefill_split: int | None = None,
+                    track_quantization: bool = False):
     import torch
     if max_new_tokens < 1:
         raise ValueError("max_new_tokens must be >=1")
     device = model.get_input_embeddings().weight.device
+    if prefill_split is not None and not 0 < prefill_split < len(prompt_ids):
+        raise ValueError("prefill_split должен разделять непустые части одного входа")
+    on_cuda = device.type == "cuda"
+    def synchronize():
+        if on_cuda:
+            torch.cuda.synchronize()
     input_ids = torch.tensor([prompt_ids], dtype=torch.long, device=device)
     attention_mask = torch.ones_like(input_ids)
     cache_position = torch.arange(input_ids.shape[-1], dtype=torch.long, device=device)
     cache = make_cache(model, cache_name, residual_length)
+    quantize_calls = [0 for _ in cache.layers]
+    if track_quantization:
+        for index, layer in enumerate(cache.layers):
+            if hasattr(layer, "_quantize"):
+                def counted_quantize(tensor, axis, original=layer._quantize, index=index):
+                    quantize_calls[index] += 1
+                    return original(tensor, axis=axis)
+                layer._quantize = counted_quantize
     # Timings are valid on the GPU (CUDA work is asynchronous otherwise).
-    torch.cuda.synchronize()
-    torch.cuda.reset_peak_memory_stats()
+    synchronize()
+    if on_cuda:
+        torch.cuda.reset_peak_memory_stats()
     t0 = time.perf_counter()
     with torch.inference_mode():
-        output = model(input_ids=input_ids, attention_mask=attention_mask,
-                       cache_position=cache_position, past_key_values=cache,
-                       use_cache=True, logits_to_keep=1)
+        if prefill_split is not None:
+            output = model(input_ids=input_ids[:, :prefill_split],
+                           attention_mask=attention_mask[:, :prefill_split],
+                           cache_position=cache_position[:prefill_split], past_key_values=cache,
+                           use_cache=True, logits_to_keep=1)
+            cache = output.past_key_values
+            del output
+            output = model(input_ids=input_ids[:, prefill_split:], attention_mask=attention_mask,
+                           cache_position=cache_position[prefill_split:], past_key_values=cache,
+                           use_cache=True, logits_to_keep=1)
+        else:
+            output = model(input_ids=input_ids, attention_mask=attention_mask,
+                           cache_position=cache_position, past_key_values=cache,
+                           use_cache=True, logits_to_keep=1)
         cache = output.past_key_values
         next_token = output.logits[:, -1, :].argmax(dim=-1, keepdim=True)
         generated = [int(next_token.item())]
         del output
-        torch.cuda.synchronize()
+        synchronize()
         t_prefill = time.perf_counter()
         current_position = torch.tensor([len(prompt_ids)], dtype=torch.long, device=device)
         eos_ids = eos_ids_for(tokenizer, model)
@@ -89,18 +116,24 @@ def greedy_generate(model, tokenizer, prompt_ids, cache_name: str, residual_leng
             generated.append(int(next_token.item()))
             current_position += 1
             del output
-        torch.cuda.synchronize()
+        synchronize()
         t_end = time.perf_counter()
-        peak_gpu_gib = torch.cuda.max_memory_allocated() / (1024 ** 3)
+        peak_gpu_gib = torch.cuda.max_memory_allocated() / (1024 ** 3) if on_cuda else None
     text = tokenizer.decode(generated, skip_special_tokens=True)
     stats = {
         "prefill_sec": round(t_prefill - t0, 6),
         "decode_sec": round(t_end - t_prefill, 6),
         "decode_steps": len(generated) - 1,
         "decode_tok_s": (len(generated)-1) / (t_end-t_prefill) if len(generated)>1 and t_end>t_prefill else None,
-        "peak_gpu_gib": round(peak_gpu_gib, 6),
+        "peak_gpu_gib": round(peak_gpu_gib, 6) if peak_gpu_gib is not None else None,
         "output_tokens": len(generated),
+        "output_ids": generated,
+        "stop_reason": "eos" if generated[-1] in eos_ids else "max_new_tokens",
     }
+    if track_quantization:
+        stats["quantize_calls_by_layer"] = quantize_calls
+        stats["prefill_split"] = prefill_split
+        stats["query_tokens"] = len(prompt_ids) - prefill_split if prefill_split is not None else None
     del cache
     return text, stats
 

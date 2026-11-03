@@ -1,0 +1,176 @@
+**Следующая серия: protocol_v1. Статус: код подготовлен, GPU smoke ещё не выполнен.**
+
+Исследуем, сохраняется ли чувствительность HQQ INT4 при штатном chat prompt
+и зависит ли она от того, используется ли квантованный cache уже при чтении вопроса.
+Основание и дальнейшие направления: [полный разбор](review_2026-11-03.md).
+
+Перед публикацией выполнены 62/62 локальных теста с Torch 2.14.0 и Transformers
+5.17.0. Численная проверка использует маленькие случайные Qwen3/SmolLM3 на CPU:
+ручной decode совпадает с `model.generate`, а split prefill сохраняет Dynamic-ответ.
+Контролируемый тест `QuantizedLayer` проверяет момент влияния приближённого cache
+и счётчик переквантизаций. Это не проверка реального HQQ/FP16/CUDA на V100.
+
+| Параметр | Зафиксированное значение |
+|---|---|
+| Модели | Qwen3-1.7B, Qwen3-4B, SmolLM3-3B |
+| Данные | прежние n80/seed2027: passage_retrieval_en, multifieldqa_en |
+| Промпт | native chat template, enable_thinking=False |
+| Вход | максимум 16 384 токена, middle truncation готовых chat token IDs |
+| Генерация | greedy, до 32/64 новых токенов соответственно, EOS stop |
+| Cache | Dynamic, HQQ INT4 g16, HQQ INT4 g64 |
+| HQQ | axis_key=axis_value=1, residual_length=128 |
+| Prefill | single_prefill и context_then_question |
+| Железо | 1 GPU на процесс, FP16, явно SDPA |
+| Smoke | 36 ячеек × 3 вопроса = 108 ответов + 18 сверок model.generate |
+| Полная матрица | 36 × 80 = 2 880 ответов; это план, не полученные результаты |
+
+Матрица: [experiments/protocol_v1.json](../experiments/protocol_v1.json).
+Новые данные: `data/prepared/protocol_v1/`; ответы: `results/protocol_v1/`.
+Прежние каталоги Qwen3 и SmolLM3 не меняются.
+
+В `single_prefill` весь вход подаётся сразу. В `context_then_question` первая
+часть заканчивается у границы документа, а вопрос и assistant suffix подаются
+вторым forward с заполненным cache. Обе части берутся из **одних готовых IDs**;
+их конкатенация точно равна входу single_prefill. Граница выбирается по общему
+token prefix: пограничный токен при необходимости переходит во вторую часть.
+
+Порядок подачи также меняет историю квантования: длинный query block может
+заполнить residual storage и вызвать повторную квантизацию на следующем decode.
+Поэтому сохраняются длина query и число реальных вызовов `_quantize` по слоям
+(K и V считаются отдельно). Это сравнение двух способов использования stock cache;
+его нельзя трактовать как изолированную замену точности только при чтении вопроса.
+
+Переключение raw→chat и порядок prefill являются разными факторами.
+Старые raw-результаты сохраняются как отдельная постановка. Новые два порядка
+prefill сравниваются при одинаковом native chat. Эта серия использует уже
+исследованные вопросы, поэтому служит разработке и контролю протокола;
+следующая подтверждающая проверка потребует новых документов/задач.
+
+**1. На login-узле обновить код и проверить существующие результаты.**
+
+```bash
+cd ~/kv-cache-longbench-pilot
+git pull --ff-only
+module load python
+conda activate kvcache
+python -m unittest discover -s tests -v
+sha256sum data/raw/longbench-data.zip
+```
+
+Хеш проверенного официального архива:
+`cb45b11a4133c6bc1d6a44b0f8e701335ff1e543195db1103472e575857f7f64`.
+Если хеш отличается, прежний manifest и результаты не перезаписывать:
+сначала выяснить версию архива. Новая подготовка проверяет совпадение с held-out manifest.
+
+Если Qwen3-4B retrieval n80 уже есть, оценить его до повторных запусков:
+
+```bash
+python -m src.score_family_retrieval \
+  --label Qwen3-4B \
+  --results-dir results/families/qwen3-4b/retrieval80 \
+  --out-dir results/families/qwen3-4b/summary \
+  --caches dynamic int4_g16 int4_g64
+python -m src.diagnose_single_retrieval
+```
+
+Если полной прежней серии нет, инструкция для её завершения:
+[qwen3_4b_size_control.md](qwen3_4b_size_control.md). Её raw-выходы отдельно от protocol_v1.
+
+**2. Подготовить новые входы, без GPU.**
+
+Используем уже загруженные модели. При других путях изменить только exports:
+
+```bash
+export KV_MODEL_ROOT="$(ws_find kv-cache)/models"
+export QWEN17_MODEL_PATH="$KV_MODEL_ROOT/Qwen3-1.7B"
+export QWEN4_MODEL_PATH="$KV_MODEL_ROOT/Qwen3-4B"
+export SMOL_MODEL_PATH="$KV_MODEL_ROOT/SmolLM3-3B"
+
+python -m src.prepare_protocol --name qwen3-1.7b --model "$QWEN17_MODEL_PATH"
+python -m src.prepare_protocol --name qwen3-4b --model "$QWEN4_MODEL_PATH"
+python -m src.prepare_protocol --name smollm3-3b --model "$SMOL_MODEL_PATH"
+```
+
+Ожидаем по два JSONL × 80 записей для каждой модели. Если каталог уже существует,
+подготовка откажется его перезаписывать: проверить имеющийся manifest и продолжить
+с ним при совпадении условий. Смена окружения/моделей требует отдельной версии серии.
+Если локальный chat template не поддерживает `enable_thinking`, подготовка останавливается;
+не следует молча считать thinking выключенным или обновлять всё conda-окружение.
+
+Для подготовки и отправки smoke одной командой после активации `kvcache`:
+
+```bash
+bash tools/start_protocol_smoke.sh
+```
+
+Скрипт проверяет тесты, наличие моделей и все подготовленные наборы,
+создаёт только отсутствующие каталоги и отправляет **только smoke**.
+Пути берёт из exports выше либо из стандартного workspace.
+При использовании этой команды отдельно повторять `sbatch` из следующего шага не нужно.
+
+**3. Отправить только smoke через Slurm.**
+
+```bash
+mkdir -p logs
+sbatch --export=ALL,PHASE=smoke slurm/protocol.sbatch
+```
+
+Полученный JOBID сохранить. После завершения:
+
+```bash
+sacct -j JOBID --format=JobID,State,ExitCode,Elapsed,AllocTRES
+python -m src.score_protocol --phase smoke
+```
+
+Нужны успешные коды завершения всех 36 задач, 108 сохранённых ответов,
+совпадение ручного Dynamic с `model.generate` и совпадение Dynamic между
+двумя порядками prefill. Первый токен single_prefill также должен совпасть
+между Dynamic и HQQ. Скрипт проверяет всю матрицу, входы, fingerprint и
+одинаковые исходные документы между моделями. Само качество на n=3 не обобщаем;
+прочитать реальные ответы в логах и убедиться, что Dynamic отвечает осмысленно.
+
+При несовпадении остановиться на диагностике: не менять seed/вопросы ради прохождения.
+Возможны численные расхождения из-за формы SDPA-вызова; они требуют проверки.
+Smoke проверяет реальный FP16/HQQ/CUDA-путь; локальные тесты его не заменяют.
+
+**4. После успешного smoke и разбора ответов — полная серия.**
+
+```bash
+sbatch --export=ALL,PHASE=full slurm/protocol.sbatch
+```
+
+По умолчанию одновременно выполняются две однопроцессные GPU-задачи.
+Каждая full-ячейка проверяет полный smoke и совпадение своего окружения,
+подготовленных данных, модельных артефактов и source hashes с проверочным запуском.
+При изменении этих условий запуск останавливается. Сбой можно возобновить тем же
+Slurm-индексом; повторы task IDs, чужие задачи и смешанные условия запрещены.
+Не следует запускать два процесса одновременно в один и тот же файл результата.
+
+Для повторной отправки только упавших ячеек, например 7 и 19:
+
+```bash
+sbatch --array=7,19%2 --export=ALL,PHASE=full slurm/protocol.sbatch
+```
+
+**5. Анализ без GPU.**
+
+```bash
+python -m src.score_protocol --phase full
+```
+
+CSV сохраняются в `results/protocol_v1/summary/full/`:
+`dataset_scores.csv`, `paired_contrasts.csv`, `example_scores.csv`.
+Основной контраст — g64−Dynamic отдельно для каждой модели/задачи/порядка prefill.
+Дополнительно: g16−Dynamic, разница потерь split−single и прямое различие потерь
+между моделями. Парный bootstrap ресэмплирует документы, сохраняя все вопросы
+документа вместе; средний score остаётся взвешенным по вопросам. Несколько
+контрастов рассматриваются exploratory, без автоматического заявления эквивалентности.
+
+В ответах сохраняются token IDs, EOS/max_new_tokens, полный fingerprint,
+версии torch/Transformers/HQQ, hash manifest и исходников runner. Fingerprint
+весов использует размеры/mtime локальных shards, а не SHA всего содержимого;
+это ограничение явно отражено в коде. До финального публичного результата
+следует сохранить также проверенную revision/контрольные суммы источника весов.
+
+Полная серия не запускается автоматически после smoke. Slurm-задания
+отправляются из аккаунта с доступом к кластеру.
