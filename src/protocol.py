@@ -4,9 +4,54 @@ from __future__ import annotations
 import hashlib
 import itertools
 import json
+import os
 from pathlib import Path
+import re
 
 CONFIG = Path(__file__).resolve().parents[1] / "experiments/protocol_v1.json"
+
+
+def code_revision(root, environ=None):
+    """Commit из окружения отправки или Git metadata, без запуска git на GPU-узле.
+
+    Отсутствующая metadata не мешает генерации: runner также пишет source hashes.
+    """
+    environment = os.environ if environ is None else environ
+    submitted = environment.get("PROTOCOL_CODE_COMMIT")
+    valid = lambda value: bool(re.fullmatch(r"[0-9a-fA-F]{40}|[0-9a-fA-F]{64}", value))
+    if submitted:
+        if not valid(submitted):
+            raise ValueError("PROTOCOL_CODE_COMMIT должен содержать полный hash commit")
+        return submitted.lower()
+    try:
+        git_dir = Path(root) / ".git"
+        if git_dir.is_file():
+            pointer = git_dir.read_text(encoding="utf-8").strip()
+            if not pointer.startswith("gitdir: "):
+                return None
+            git_dir = (Path(root) / pointer[len("gitdir: "):]).resolve()
+        head = (git_dir / "HEAD").read_text(encoding="utf-8").strip()
+        if valid(head):
+            return head.lower()
+        if not head.startswith("ref: refs/"):
+            return None
+        ref = head[len("ref: "):]
+        common_file = git_dir / "commondir"
+        common = (git_dir / common_file.read_text().strip()).resolve() if common_file.is_file() else git_dir
+        for directory in (git_dir, common):
+            loose_ref = directory / ref
+            if loose_ref.is_file():
+                value = loose_ref.read_text().strip()
+                return value.lower() if valid(value) else None
+        packed = common / "packed-refs"
+        if packed.is_file():
+            for line in packed.read_text().splitlines():
+                parts = line.split()
+                if len(parts) == 2 and parts[1] == ref and valid(parts[0]):
+                    return parts[0].lower()
+    except (OSError, UnicodeError):
+        pass
+    return None
 
 
 def digest_json(value):

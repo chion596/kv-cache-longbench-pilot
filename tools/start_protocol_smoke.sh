@@ -6,6 +6,10 @@ if [[ "${CONDA_DEFAULT_ENV:-}" != "kvcache" ]]; then
   echo "Сначала: module load python; conda activate kvcache" >&2
   exit 1
 fi
+# Git нужен на login-узле для обновления checkout, а не в GPU-процессе.
+if protocol_commit="$(git rev-parse HEAD 2>/dev/null)"; then
+  export PROTOCOL_CODE_COMMIT="${protocol_commit}"
+fi
 export KV_MODEL_ROOT="${KV_MODEL_ROOT:-$(ws_find kv-cache)/models}"
 export QWEN17_MODEL_PATH="${QWEN17_MODEL_PATH:-${KV_MODEL_ROOT}/Qwen3-1.7B}"
 export QWEN4_MODEL_PATH="${QWEN4_MODEL_PATH:-${KV_MODEL_ROOT}/Qwen3-4B}"

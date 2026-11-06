@@ -8,11 +8,10 @@ import gc
 import importlib.metadata
 import json
 from pathlib import Path
-import subprocess
 
 from src.common import read_jsonl
 from src.download_data import sha256_file
-from src.protocol import cells, digest_json, load_config, model_signature, result_path, validate_task
+from src.protocol import cells, code_revision, digest_json, load_config, model_signature, result_path, validate_task
 from src.run_quality import eos_ids_for, greedy_generate, make_cache
 
 
@@ -113,6 +112,9 @@ def main():
     if versions["transformers"] != manifest["transformers"]:
         raise ValueError("Transformers изменился после подготовки входов")
     root = Path(__file__).resolve().parents[1]
+    code_commit = code_revision(root)
+    if code_commit is None:
+        print("Commit metadata недоступна; сохраняем хеши исходников runner", flush=True)
     provenance = {
         "config_sha256": digest_json(config), "manifest_sha256": sha256_file(manifest_path),
         "longbench_files_sha256": manifest["longbench_files_sha256"],
@@ -140,7 +142,6 @@ def main():
         tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=True)
         model = AutoModelForCausalLM.from_pretrained(args.model, dtype=torch.float16,
             attn_implementation=config["attention"], local_files_only=True).to("cuda").eval()
-        code_commit = subprocess.check_output(["git", "-C", str(root), "rev-parse", "HEAD"], text=True).strip()
         output.parent.mkdir(parents=True, exist_ok=True)
         with output.open("a", encoding="utf-8") as handle:
             for task in tasks:

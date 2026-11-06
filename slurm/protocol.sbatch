@@ -13,6 +13,10 @@
 #SBATCH --error=logs/%x-%A_%a.err
 
 set -euo pipefail
+trap 'protocol_status=$?; printf "Ошибка Slurm: job=%s array=%s cell=%s line=%s exit=%s\n" "${SLURM_JOB_ID:-unknown}" "${SLURM_ARRAY_JOB_ID:-unknown}" "${SLURM_ARRAY_TASK_ID:-unknown}" "${LINENO}" "$protocol_status" >&2; exit "$protocol_status"' ERR
+printf 'Slurm: job=%s array=%s cell=%s phase=%s host=%s cwd=%s\n' \
+  "${SLURM_JOB_ID:-unknown}" "${SLURM_ARRAY_JOB_ID:-unknown}" "${SLURM_ARRAY_TASK_ID:-unknown}" \
+  "${PHASE:-smoke}" "${HOSTNAME:-unknown}" "${SLURM_SUBMIT_DIR}"
 module purge
 module load python
 conda activate kvcache
@@ -30,5 +34,17 @@ case "$((SLURM_ARRAY_TASK_ID / 12))" in
   *) echo "Неверная ячейка" >&2; exit 1 ;;
 esac
 test -f "${PROTOCOL_MODEL}/config.json"
+printf 'Модель: %s\n' "${PROTOCOL_MODEL}"
+printf 'Commit при отправке: %s\n' "${PROTOCOL_CODE_COMMIT:-metadata checkout}"
+python - <<'PY'
+import importlib.metadata
+import sys
+print("Python:", sys.executable, flush=True)
+for package in ("torch", "transformers", "hqq"):
+    try:
+        print(package, importlib.metadata.version(package), flush=True)
+    except importlib.metadata.PackageNotFoundError:
+        print(package, "не установлен", flush=True)
+PY
 python -u -m src.run_protocol --cell "${SLURM_ARRAY_TASK_ID}" \
   --model "${PROTOCOL_MODEL}" --phase "${PHASE}"

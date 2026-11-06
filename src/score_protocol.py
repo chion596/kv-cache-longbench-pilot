@@ -16,8 +16,22 @@ def key(cell):
     return tuple(cell[field] for field in ("model_name", "dataset", "protocol", "cache"))
 
 
+class IncompleteMatrixError(FileNotFoundError):
+    """GPU-результатов ещё нет или записана только часть ответов."""
+
+
 def read_matrix(root, config, phase):
     expected_n = config["smoke_n"] if phase == "smoke" else config["n"]
+    missing = [result_path(root, cell) for cell in cells(config)
+               if not result_path(root, cell).is_file()]
+    if missing:
+        examples = "\n".join(f"  {path}" for path in missing[:3])
+        raise IncompleteMatrixError(
+            f"Матрица {phase} не готова: отсутствуют {len(missing)} из {len(cells(config))} файлов.\n"
+            f"{examples}\n"
+            "Файлы результатов появляются после успешной генерации. "
+            "Проверьте Slurm и первичную ошибку GPU-задания:\n"
+            f"  python -m src.diagnose_protocol --phase {phase}")
     matrix = {}
     for cell in cells(config):
         filename = result_path(root, cell)
@@ -39,7 +53,12 @@ def read_matrix(root, config, phase):
             if len(row["output_ids"]) != row["output_tokens"] or row["stop_reason"] not in ("eos", "max_new_tokens"):
                 raise ValueError(f"Неполная генерация: {filename}/{tid}")
             indexed[tid] = row
-        if len(indexed) != expected_n:
+        if len(indexed) < expected_n:
+            raise IncompleteMatrixError(
+                f"Матрица {phase} не готова: {filename}: ожидалось {expected_n}, "
+                f"получено {len(indexed)}.\n"
+                f"Проверьте: python -m src.diagnose_protocol --phase {phase}")
+        if len(indexed) > expected_n:
             raise ValueError(f"{filename}: ожидалось {expected_n}, получено {len(indexed)}")
         if len({row["run_fingerprint"] for row in indexed.values()}) != 1:
             raise ValueError(f"В одном файле смешаны запуски: {filename}")
@@ -169,7 +188,10 @@ def main():
     args = parser.parse_args()
     config = load_config()
     root = Path("results/protocol_v1") / args.phase
-    matrix = read_matrix(root, config, args.phase)
+    try:
+        matrix = read_matrix(root, config, args.phase)
+    except IncompleteMatrixError as error:
+        parser.exit(2, f"{error}\n")
     print(f"Матрица проверена: {len(matrix)} ячеек, {sum(len(v) for v in matrix.values())} ответов")
     if args.check_only:
         return
