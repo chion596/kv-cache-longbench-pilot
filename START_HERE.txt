@@ -5,11 +5,24 @@ KV CACHE + LONGBENCH: ТЕКУЩИЙ СТАРТ
 Текущий отчёт: docs/protocol_v1_full_results_2026-11-08.md.
 Агрегаты и интервалы: reports/protocol_v1_2026-11-08/.
 
-Следующий шаг на кластере, без GPU:
+CPU-диагностика завершена:
+  docs/protocol_v1_diagnostics_2026-11-08.md
+
+Следующий шаг на login-узле: smoke серии g32, 24 ответа.
   git pull --ff-only
   module load python
   conda activate kvcache
-  python -m src.analyze_protocol_details
+  bash tools/start_group_size.sh smoke
+
+После завершения smoke:
+  python -m src.score_group_size --phase smoke
+
+Полный запуск после успешного smoke и просмотра ответов — 640 новых генераций:
+  bash tools/start_group_size.sh full
+  python -m src.score_group_size --phase full
+
+Матрица и подробности:
+  docs/group_size_control_2026-11-08.md
 
 Пошаговая инструкция:
   docs/next_experiments_2026-11-03.md

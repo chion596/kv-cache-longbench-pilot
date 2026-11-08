@@ -1,0 +1,7 @@
+model,dataset,n,different_output_ids,different_text,different_score,different_first_token,delta_pp,cluster_ci95_low_pp,cluster_ci95_high_pp
+qwen3-1.7b,passage_retrieval_en,80,0,0,0,0,0.0,0.0,0.0
+qwen3-1.7b,multifieldqa_en,80,1,1,1,0,-0.006349782293178577,-0.019791529225491666,0.0
+qwen3-4b,passage_retrieval_en,80,1,1,1,1,1.25,0.0,3.75
+qwen3-4b,multifieldqa_en,80,0,0,0,0,0.0,0.0,0.0
+smollm3-3b,passage_retrieval_en,80,2,2,1,0,0.625,0.0,1.875
+smollm3-3b,multifieldqa_en,80,2,2,0,0,0.0,0.0,0.0

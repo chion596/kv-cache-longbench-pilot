@@ -1,0 +1,14 @@
+{
+  "series": "group_size_v1",
+  "reference_series": "protocol_v1",
+  "models": ["qwen3-1.7b", "qwen3-4b"],
+  "datasets": ["passage_retrieval_en", "multifieldqa_en"],
+  "protocols": ["single_prefill", "context_then_question"],
+  "cache": "int4_g32",
+  "residual_length": 128,
+  "n": 80,
+  "smoke_n": 3,
+  "primary_contrast": "g32 - Dynamic, separately per model/dataset/protocol",
+  "secondary_contrasts": ["g32 - g64", "g32 - g16", "split_loss - single_loss:g32"],
+  "bootstrap_unit": "exact source context; paired across configurations"
+}

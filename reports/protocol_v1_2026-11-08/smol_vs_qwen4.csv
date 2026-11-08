@@ -1,0 +1,5 @@
+reference_model,candidate_model,dataset,protocol,comparison,n,delta_pp,cluster_ci95_low_pp,cluster_ci95_high_pp
+qwen3-4b,smollm3-3b,passage_retrieval_en,single_prefill,candidate_g64_loss-reference_g64_loss,80,-1.6666666666666667,-10.625,6.666666666666668
+qwen3-4b,smollm3-3b,passage_retrieval_en,context_then_question,candidate_g64_loss-reference_g64_loss,80,48.749999999999986,36.25,60.83333333333333
+qwen3-4b,smollm3-3b,multifieldqa_en,single_prefill,candidate_g64_loss-reference_g64_loss,80,5.671624707498529,2.341319066070756,9.051755303705296
+qwen3-4b,smollm3-3b,multifieldqa_en,context_then_question,candidate_g64_loss-reference_g64_loss,80,14.107979526178053,8.137607245735124,20.105913051039334

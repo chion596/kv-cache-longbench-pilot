@@ -1,0 +1,20 @@
+{
+  "source": "User supplied stdout of src.analyze_protocol_details on the cluster",
+  "snapshot_date": "2026-11-08",
+  "terminal_export_sha256": "3e566289fa911e62ea2ca64e6fbe1f2b56b300a7d6f40cf9edcb1f14ec6660f7",
+  "raw_jsonl_independently_available_in_this_checkout": false,
+  "exported_sections": {
+    "dynamic_drift.csv": "All 6 model/dataset Dynamic comparisons",
+    "g64_diagnostics.csv": "12 g64 cells only; other caches were not printed",
+    "smol_vs_qwen4.csv": "4 direct model contrasts only; other model pairs were not printed"
+  },
+  "notes": [
+    "Values and intervals copied from stdout; no per-example joint distributions were supplied.",
+    "Aggregate first-token and refresh counts do not identify individual tasks."
+  ],
+  "aggregate_file_sha256": {
+    "dynamic_drift.csv": "fd6daed156daf9f9f086f780afd7422bc9b3770fadf66c5e1dd82aa6d1149d8e",
+    "g64_diagnostics.csv": "8e5a5a4bbd1d94a18374027c48ad4df39861618de70e2fcc1cbffc1af6d5f78d",
+    "smol_vs_qwen4.csv": "315c457ac1a65be4e5d30309e17823c604b197ff41aceba94856e10ed364b1ba"
+  }
+}
