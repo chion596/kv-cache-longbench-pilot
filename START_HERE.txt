@@ -1,12 +1,20 @@
 KV CACHE + LONGBENCH: ТЕКУЩИЙ СТАРТ
 
 Прежние пилоты Qwen3-1.7B и SmolLM3-3B завершены и описаны в README.
-Следующая серия protocol_v1 подготовлена; GPU-результатов новой серии пока нет.
+Серия protocol_v1 завершена: 36 ячеек, 2 880 ответов, n=80.
+Текущий отчёт: docs/protocol_v1_full_results_2026-11-08.md.
+Агрегаты и интервалы: reports/protocol_v1_2026-11-08/.
+
+Следующий шаг на кластере, без GPU:
+  git pull --ff-only
+  module load python
+  conda activate kvcache
+  python -m src.analyze_protocol_details
 
 Пошаговая инструкция:
   docs/next_experiments_2026-11-03.md
 
-Порядок:
+Для воспроизведения завершённой серии:
 1. На login-узле: git pull --ff-only, module load python, conda activate kvcache.
 2. Проверить существующий Qwen3-4B n80, архив и локальные веса.
 3. Подготовить native-chat входы для трёх моделей, не меняя старые каталоги.

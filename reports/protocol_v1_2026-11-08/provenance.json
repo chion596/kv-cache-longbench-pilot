@@ -1,0 +1,25 @@
+{
+  "series": "protocol_v1",
+  "snapshot_date": "2026-11-08",
+  "slurm_array_id": 4495433,
+  "source": "User supplied terminal export and pasted paired_contrasts.csv",
+  "terminal_export_sha256": "e4c8916db79301721d5e1e4cb6ceebb4d8c0e86b872ad9f9265c141ca3ca405c",
+  "matrix_cells": 36,
+  "answers": 2880,
+  "n_per_cell": 80,
+  "reported_validation": "src.score_protocol --phase full completed and wrote CSVs",
+  "raw_jsonl_independently_available_in_this_checkout": false,
+  "ci_unit": "source context/document; 80 retrieval documents, 67 QA documents",
+  "ci_bootstrap_iterations": 2000,
+  "ci_bootstrap_seed": 2026,
+  "multiple_testing_adjustment": false,
+  "hardware": "V100 (protocol setting; full sacct/hardware logs not included in export)",
+  "notes": [
+    "Confidence intervals are copied from the user supplied CSV, not reconstructed from group means.",
+    "Full Dynamic single/split equality is not a validation requirement; drift must be audited separately."
+  ],
+  "aggregate_file_sha256": {
+    "dataset_scores.csv": "a8aa4c8e35a485e7682fdaf295d99663568e64d704f9f2abce04e192c5861bc5",
+    "paired_contrasts.csv": "72bf9f131e91ad5afcf356076c55459ff2c1a5c29f34e908b9586ae1784ffef4"
+  }
+}
