@@ -1,0 +1,9 @@
+model,dataset,protocol,n,documents,g32_score_pct,first_token_changed,changed_first_token_score_lower,changed_first_token_score_same,changed_first_token_score_higher,changed_first_token_full_score,same_first_token_score_lower,first_number_correct,dynamic_first_number_correct,baseline_correct_first_number_lost,first_number_recovered,max_token_limit_count,think_closing_text_count
+qwen3-1.7b,passage_retrieval_en,single_prefill,80,80,91.875,0,0,0,0,0,8,76,78,3,1,11,0
+qwen3-1.7b,passage_retrieval_en,context_then_question,80,80,56.45833333333333,50,23,26,1,26,16,49,78,30,1,38,45
+qwen3-1.7b,multifieldqa_en,single_prefill,80,67,45.71073440607634,0,0,0,0,0,15,,,,,2,0
+qwen3-1.7b,multifieldqa_en,context_then_question,80,67,42.24362275178981,32,15,5,12,1,16,,,,,13,0
+qwen3-4b,passage_retrieval_en,single_prefill,80,80,93.75,0,0,0,0,0,2,75,77,2,0,2,0
+qwen3-4b,passage_retrieval_en,context_then_question,80,80,100.0,17,0,15,2,17,0,80,78,0,2,0,0
+qwen3-4b,multifieldqa_en,single_prefill,80,67,51.164048641199635,0,0,0,0,0,12,,,,,7,0
+qwen3-4b,multifieldqa_en,context_then_question,80,67,52.803832099859335,10,4,0,6,0,7,,,,,6,0

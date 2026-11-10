@@ -10,11 +10,24 @@ KV CACHE + LONGBENCH: ТЕКУЩИЙ СТАРТ
 CPU-диагностика завершена:
   docs/protocol_v1_diagnostics_2026-11-08.md
 
-Следующий шаг на login-узле: CPU-разбор сохранённых ответов g32, без новой генерации.
+Диагностика g32 завершена:
+  docs/group_size_diagnostics_2026-11-10.md
+
+Следующий шаг на login-узле: 12 smoke-ответов контроля residual=512.
   git pull --ff-only
   module load python
   conda activate kvcache
-  python -m src.analyze_group_size
+  bash tools/start_residual.sh smoke
+
+После завершения четырёх smoke-ячеек:
+  python -m src.score_residual --phase smoke
+
+После успешного smoke и просмотра ответов — 320 новых ответов:
+  bash tools/start_residual.sh full
+  python -m src.score_residual --phase full
+
+Условия, проверки, интерпретация:
+  docs/residual_control_2026-11-10.md
 
 Для воспроизведения завершённой серии g32:
   docs/group_size_control_2026-11-08.md

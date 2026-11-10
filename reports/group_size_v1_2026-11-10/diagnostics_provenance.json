@@ -1,0 +1,20 @@
+{
+  "source": "User supplied stdout of src.analyze_group_size",
+  "snapshot_date": "2026-11-10",
+  "terminal_export_sha256": "ea5b6b5532ac39792ac5ac7d194c1d51600637af2661ca542cf80ca8910dc08f",
+  "raw_jsonl_independently_available_in_this_checkout": false,
+  "counts": {
+    "cell_diagnostics": 8,
+    "first_number_contrasts": 12
+  },
+  "notes": [
+    "Counts and intervals copied from stdout; trajectories.csv was not supplied.",
+    "Arithmetic consistency checked against published g32/g64 summaries.",
+    "Conditioning on first-token change is descriptive, not a causal comparison.",
+    "First-number correctness is auxiliary; official LongBench scoring is unchanged."
+  ],
+  "aggregate_file_sha256": {
+    "answer_diagnostics.csv": "5b3f1dac5a0e7b42e3478a9d5ddfc688948118c8e2f0cacbeb47ec0a06b90083",
+    "first_number_contrasts.csv": "fc903716a612e7bd351266c65bb8fe59b54f687bf283993869c933ee03e870c7"
+  }
+}

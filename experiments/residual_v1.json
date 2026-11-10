@@ -1,0 +1,15 @@
+{
+  "series": "residual_v1",
+  "reference_series": ["protocol_v1", "group_size_v1"],
+  "models": ["qwen3-1.7b", "qwen3-4b"],
+  "datasets": ["passage_retrieval_en"],
+  "protocols": ["context_then_question"],
+  "caches": ["int4_g32", "int4_g64"],
+  "reference_residual_length": 128,
+  "residual_length": 512,
+  "n": 80,
+  "smoke_n": 3,
+  "primary_contrast": "retrieval_score: residual512 - residual128, paired separately per model and group",
+  "auxiliary_contrast": "first-number correctness: residual512 - residual128",
+  "bootstrap_unit": "exact source context; paired across configurations"
+}
