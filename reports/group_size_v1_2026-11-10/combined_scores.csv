@@ -1,0 +1,9 @@
+model,dataset,protocol,n,documents,dynamic_score_pct,g16_score_pct,g32_score_pct,g64_score_pct
+qwen3-1.7b,passage_retrieval_en,single_prefill,80,80,97.5,95.625,91.875,32.854166666666664
+qwen3-1.7b,passage_retrieval_en,context_then_question,80,80,97.5,96.25,56.45833333333333,0.0
+qwen3-1.7b,multifieldqa_en,single_prefill,80,67,45.876946803589036,45.30351338738498,45.71073440607634,32.46748809013303
+qwen3-1.7b,multifieldqa_en,context_then_question,80,67,45.87059702129586,45.809540888295366,42.24362275178981,2.9059857965798286
+qwen3-4b,passage_retrieval_en,single_prefill,80,80,96.25,96.25,93.75,91.25
+qwen3-4b,passage_retrieval_en,context_then_question,80,80,97.5,98.75,100.0,42.291666666666664
+qwen3-4b,multifieldqa_en,single_prefill,80,67,54.2784001964407,53.926983266910156,51.164048641199635,49.43839326641286
+qwen3-4b,multifieldqa_en,context_then_question,80,67,54.2784001964407,51.82593819356829,52.803832099859335,41.16058758349955

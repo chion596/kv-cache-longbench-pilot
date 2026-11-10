@@ -2,26 +2,21 @@ KV CACHE + LONGBENCH: ТЕКУЩИЙ СТАРТ
 
 Прежние пилоты Qwen3-1.7B и SmolLM3-3B завершены и описаны в README.
 Серия protocol_v1 завершена: 36 ячеек, 2 880 ответов, n=80.
-Текущий отчёт: docs/protocol_v1_full_results_2026-11-08.md.
+Серия group_size_v1 завершена: 8 ячеек g32, 640 новых ответов.
+Текущий отчёт: docs/group_size_results_2026-11-10.md.
+Основная матрица: docs/protocol_v1_full_results_2026-11-08.md.
 Агрегаты и интервалы: reports/protocol_v1_2026-11-08/.
 
 CPU-диагностика завершена:
   docs/protocol_v1_diagnostics_2026-11-08.md
 
-Следующий шаг на login-узле: smoke серии g32, 24 ответа.
+Следующий шаг на login-узле: CPU-разбор сохранённых ответов g32, без новой генерации.
   git pull --ff-only
   module load python
   conda activate kvcache
-  bash tools/start_group_size.sh smoke
+  python -m src.analyze_group_size
 
-После завершения smoke:
-  python -m src.score_group_size --phase smoke
-
-Полный запуск после успешного smoke и просмотра ответов — 640 новых генераций:
-  bash tools/start_group_size.sh full
-  python -m src.score_group_size --phase full
-
-Матрица и подробности:
+Для воспроизведения завершённой серии g32:
   docs/group_size_control_2026-11-08.md
 
 Пошаговая инструкция:

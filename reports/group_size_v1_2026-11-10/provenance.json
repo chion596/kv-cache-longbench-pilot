@@ -1,0 +1,32 @@
+{
+  "series": "group_size_v1",
+  "snapshot_date": "2026-11-10",
+  "source": "User supplied terminal stdout of src.score_group_size --phase full and paired_contrasts.csv",
+  "terminal_export_sha256": "d243821674ea0cb3f461f693803f9f81a81b43d1413bcf3e6302e564da8caaff",
+  "matrix_cells": 8,
+  "new_full_answers": 640,
+  "n_per_cell": 80,
+  "reported_validation": "src.score_group_size validated 8 cells and 640 answers on the cluster",
+  "raw_jsonl_independently_available_in_this_checkout": false,
+  "slurm_array_id": null,
+  "ci_bootstrap_iterations": 2000,
+  "ci_bootstrap_seed": 2026,
+  "multiple_testing_adjustment": false,
+  "ci_unit": "source context/document; 80 retrieval documents, 67 QA documents",
+  "reference_snapshot": "reports/protocol_v1_2026-11-08",
+  "reference_snapshot_sha256": {
+    "dataset_scores.csv": "a8aa4c8e35a485e7682fdaf295d99663568e64d704f9f2abce04e192c5861bc5",
+    "paired_contrasts.csv": "72bf9f131e91ad5afcf356076c55459ff2c1a5c29f34e908b9586ae1784ffef4"
+  },
+  "aggregate_file_sha256": {
+    "dataset_scores.csv": "c92b755987a217460dac3ccba827c71b6055d1ed69fbec38bdd7cdb5150bd009",
+    "paired_contrasts.csv": "0037126bcaaa4a321d410290ac632d548dd60706fd6b9e4fe1e3d2b6052b65a9",
+    "combined_scores.csv": "57f5b0620bc0d3592c7142cfc8187a030cecf198af5e0f86aae29388cb3929a1"
+  },
+  "notes": [
+    "All 32 point contrasts match the supplied means and previously published baseline means.",
+    "Confidence intervals are copied, not recomputed from aggregate means.",
+    "Baseline generations are reused, not new independent replications.",
+    "Full Slurm/hardware logs were not included in the export."
+  ]
+}

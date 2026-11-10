@@ -1,0 +1,9 @@
+model,dataset,protocol,cache,n,documents,score_pct,eos_count,first_token_changed_vs_dynamic,repeated_quantization_count
+qwen3-1.7b,passage_retrieval_en,single_prefill,int4_g32,80,80,91.875,69,0,0
+qwen3-1.7b,passage_retrieval_en,context_then_question,int4_g32,80,80,56.45833333333333,42,50,80
+qwen3-1.7b,multifieldqa_en,single_prefill,int4_g32,80,67,45.71073440607634,78,0,0
+qwen3-1.7b,multifieldqa_en,context_then_question,int4_g32,80,67,42.24362275178981,67,32,0
+qwen3-4b,passage_retrieval_en,single_prefill,int4_g32,80,80,93.75,78,0,0
+qwen3-4b,passage_retrieval_en,context_then_question,int4_g32,80,80,100.0,80,17,80
+qwen3-4b,multifieldqa_en,single_prefill,int4_g32,80,67,51.164048641199635,73,0,0
+qwen3-4b,multifieldqa_en,context_then_question,int4_g32,80,67,52.803832099859335,74,10,0
