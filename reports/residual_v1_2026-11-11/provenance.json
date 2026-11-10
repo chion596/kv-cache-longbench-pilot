@@ -1,0 +1,24 @@
+{
+  "series": "residual_v1",
+  "snapshot_date": "2026-11-11",
+  "source": "User pasted complete scorer stdout and paired_contrasts.csv in chat",
+  "raw_jsonl_independently_available_in_this_checkout": false,
+  "matrix_cells": 4,
+  "new_full_answers": 320,
+  "n_per_cell": 80,
+  "reported_validation": "Scorer validated all 4 cells, no refresh in any layer and identical first tokens vs residual128",
+  "slurm_array_id": null,
+  "ci_unit": "source context/document; 80 unique retrieval contexts",
+  "ci_bootstrap_iterations": 2000,
+  "ci_bootstrap_seed": 2026,
+  "multiple_testing_adjustment": false,
+  "notes": [
+    "All 20 point contrasts checked against supplied means and published baselines.",
+    "Intervals copied from supplied CSV, not reconstructed from aggregate means.",
+    "No full sacct, hardware log, or per-example output supplied."
+  ],
+  "aggregate_file_sha256": {
+    "dataset_scores.csv": "948dc863c5c0a38011eb70a494cc2d8aa1f22f7a8b9f409acc875533b76a2a6b",
+    "paired_contrasts.csv": "a9fec1e5e9f190a208b04d6e004c458889746db1e4dc1a336916c60290de1b9a"
+  }
+}

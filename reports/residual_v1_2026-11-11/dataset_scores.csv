@@ -1,0 +1,5 @@
+model,dataset,protocol,cache,n,documents,residual512_score_pct,residual128_score_pct,first_number_correct512,first_number_correct128,eos_count512,max_token_limit_count512,think_closing_text_count512,repeated_quantization_count512,repeated_quantization_count128,first_token_changed_vs128,identical_output_ids_vs128
+qwen3-1.7b,passage_retrieval_en,context_then_question,int4_g32,80,80,62.470238095238095,56.45833333333333,52,49,48,32,45,0,80,0,15
+qwen3-1.7b,passage_retrieval_en,context_then_question,int4_g64,80,80,0.15625,0.0,1,0,2,78,67,0,80,0,9
+qwen3-4b,passage_retrieval_en,context_then_question,int4_g32,80,80,100.0,100.0,80,80,80,0,0,0,80,0,80
+qwen3-4b,passage_retrieval_en,context_then_question,int4_g64,80,80,43.541666666666664,42.291666666666664,36,36,44,36,7,0,77,0,24
