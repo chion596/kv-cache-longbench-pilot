@@ -1,0 +1,76 @@
+{
+  "source": "User supplied cluster stdout of src.audit_expansion",
+  "snapshot_date": "2026-11-11",
+  "history_coverage": "published_and_local",
+  "history_jsonl_files": 159,
+  "recognized_history_rows": 7669,
+  "reported_history_scan_errors": 0,
+  "full_audit_json_available_in_this_checkout": false,
+  "preview_indices_in_stdout": false,
+  "datasets": [
+    {
+      "dataset": "passage_retrieval_en",
+      "total_questions": 200,
+      "total_contexts": 200,
+      "excluded_question_indices": 120,
+      "unused_question_indices": 80,
+      "eligible_questions_on_new_contexts": 80,
+      "eligible_contexts": 80,
+      "preview_n": 80
+    },
+    {
+      "dataset": "multifieldqa_en",
+      "total_questions": 150,
+      "total_contexts": 112,
+      "excluded_question_indices": 120,
+      "unused_question_indices": 30,
+      "eligible_questions_on_new_contexts": 17,
+      "eligible_contexts": 17,
+      "preview_n": 17
+    },
+    {
+      "dataset": "multifieldqa_zh",
+      "total_questions": 200,
+      "total_contexts": 142,
+      "excluded_question_indices": 120,
+      "unused_question_indices": 80,
+      "eligible_questions_on_new_contexts": 48,
+      "eligible_contexts": 42,
+      "preview_n": 42
+    },
+    {
+      "dataset": "passage_retrieval_zh",
+      "total_questions": 200,
+      "total_contexts": 200,
+      "excluded_question_indices": 0,
+      "unused_question_indices": 200,
+      "eligible_questions_on_new_contexts": 200,
+      "eligible_contexts": 200,
+      "preview_n": 80
+    },
+    {
+      "dataset": "qasper",
+      "total_questions": 200,
+      "total_contexts": 148,
+      "excluded_question_indices": 0,
+      "unused_question_indices": 200,
+      "eligible_questions_on_new_contexts": 200,
+      "eligible_contexts": 148,
+      "preview_n": 80
+    },
+    {
+      "dataset": "hotpotqa",
+      "total_questions": 200,
+      "total_contexts": 200,
+      "excluded_question_indices": 0,
+      "unused_question_indices": 200,
+      "eligible_questions_on_new_contexts": 200,
+      "eligible_contexts": 200,
+      "preview_n": 80
+    }
+  ],
+  "notes": [
+    "This is a transcript of aggregates, not the frozen selection manifest.",
+    "Preparation rechecks the actual audit JSON and archive on the cluster before freezing source indices."
+  ]
+}

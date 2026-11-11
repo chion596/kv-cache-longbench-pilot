@@ -15,11 +15,24 @@ CPU-диагностика завершена:
 Диагностика g32 завершена:
   docs/group_size_diagnostics_2026-11-10.md
 
-Следующий шаг на login-узле: CPU-аудит новых документов, без GPU.
+Аудит кластера прошёл: 159 JSONL, 7 669 записей, ошибок нет.
+Новая серия expansion_v1 подготовлена: 48 ячеек, 3 840 полных ответов.
+
+Следующий шаг на login-узле: подготовка данных и 144 smoke-ответа.
   git pull --ff-only
   module load python
   conda activate kvcache
-  python -m src.audit_expansion
+  bash tools/start_expansion.sh smoke
+
+После завершения всех 48 smoke-ячеек:
+  python -m src.score_expansion --phase smoke
+
+После успешных проверок и просмотра ответов:
+  bash tools/start_expansion.sh full
+  python -m src.score_expansion --phase full
+
+Подробные условия, выборка и команды:
+  docs/expansion_protocol_2026-11-11.md
 
 План расширения и ограничения независимости:
   docs/next_stage_2026-11-11.md

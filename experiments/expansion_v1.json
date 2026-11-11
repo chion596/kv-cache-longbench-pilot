@@ -1,0 +1,20 @@
+{
+  "series": "expansion_v1",
+  "models": ["qwen3-1.7b", "qwen3-4b", "smollm3-3b"],
+  "datasets": ["passage_retrieval_en", "hotpotqa"],
+  "protocols": ["single_prefill", "context_then_question"],
+  "caches": ["dynamic", "int4_g16", "int4_g32", "int4_g64"],
+  "n": 80,
+  "smoke_n": 3,
+  "sampling_seed": 2031,
+  "max_input_tokens": 16384,
+  "max_new_tokens": {"passage_retrieval_en": 32, "hotpotqa": 32},
+  "residual_length": 512,
+  "dtype": "float16",
+  "attention": "sdpa",
+  "prompt_mode": "native_chat_no_thinking",
+  "archive_sha256": "cb45b11a4133c6bc1d6a44b0f8e701335ff1e543195db1103472e575857f7f64",
+  "primary_contrasts": "g64 - own Dynamic per model/dataset/protocol; split loss - single loss",
+  "secondary_contrasts": "g16/g32 - Dynamic and direct paired model differences in g32/g64 losses",
+  "bootstrap_unit": "source context, paired across conditions; nominal intervals without multiplicity adjustment"
+}

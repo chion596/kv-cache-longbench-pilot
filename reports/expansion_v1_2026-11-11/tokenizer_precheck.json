@@ -1,0 +1,73 @@
+{
+  "scope": "Hub tokenizer precheck; exact cluster artifacts are checked separately",
+  "rows": [
+    {
+      "model": "qwen3-1.7b",
+      "repo": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "dataset": "passage_retrieval_en",
+      "n": 80,
+      "max_query_tokens": 428,
+      "max_input_tokens": 15160,
+      "middle_truncated": 0
+    },
+    {
+      "model": "qwen3-1.7b",
+      "repo": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "dataset": "hotpotqa",
+      "n": 80,
+      "max_query_tokens": 88,
+      "max_input_tokens": 16384,
+      "middle_truncated": 24
+    },
+    {
+      "model": "qwen3-4b",
+      "repo": "Qwen/Qwen3-4B",
+      "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+      "dataset": "passage_retrieval_en",
+      "n": 80,
+      "max_query_tokens": 428,
+      "max_input_tokens": 15160,
+      "middle_truncated": 0
+    },
+    {
+      "model": "qwen3-4b",
+      "repo": "Qwen/Qwen3-4B",
+      "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+      "dataset": "hotpotqa",
+      "n": 80,
+      "max_query_tokens": 88,
+      "max_input_tokens": 16384,
+      "middle_truncated": 24
+    },
+    {
+      "model": "smollm3-3b",
+      "repo": "HuggingFaceTB/SmolLM3-3B",
+      "revision": "a07cc9a04f16550a088caea529712d1d335b0ac1",
+      "dataset": "passage_retrieval_en",
+      "n": 80,
+      "max_query_tokens": 428,
+      "max_input_tokens": 14733,
+      "middle_truncated": 0
+    },
+    {
+      "model": "smollm3-3b",
+      "repo": "HuggingFaceTB/SmolLM3-3B",
+      "revision": "a07cc9a04f16550a088caea529712d1d335b0ac1",
+      "dataset": "hotpotqa",
+      "n": 80,
+      "max_query_tokens": 84,
+      "max_input_tokens": 16384,
+      "middle_truncated": 10
+    }
+  ],
+  "snapshot_date": "2026-11-11",
+  "archive_sha256": "cb45b11a4133c6bc1d6a44b0f8e701335ff1e543195db1103472e575857f7f64",
+  "selection_preview_sha256": "363562a376eea4b2e4695887ce416ed5f2fd4972ab78825a864452cfc425c123",
+  "prompt_url": "https://raw.githubusercontent.com/THUDM/LongBench/main/LongBench/config/dataset2prompt.json",
+  "limitations": [
+    "Hub artifacts may differ from cluster snapshots; exact cluster artifacts are checked by preparation.",
+    "No model weights or GPU inference were used for this tokenizer check."
+  ]
+}
