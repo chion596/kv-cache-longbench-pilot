@@ -1,0 +1,41 @@
+{
+  "series": "expansion_v1",
+  "snapshot_date": "2026-11-12",
+  "source": "User supplied terminal export of full scorer and paired_contrasts.csv",
+  "terminal_export_sha256": "d3c4379ce022a58355044d0c828415ad7f70600b115f5c6ec65530d12f3b3d4c",
+  "matrix_cells": 48,
+  "new_full_answers": 3840,
+  "n_per_cell": 80,
+  "unique_contexts_per_dataset": 80,
+  "raw_jsonl_independently_available_in_this_checkout": false,
+  "validation_evidence": "48 unique n80 summaries and 78 paired contrasts; all point contrasts checked arithmetically",
+  "source_export_starts_after_matrix_header": true,
+  "ci_bootstrap_iterations": 2000,
+  "ci_bootstrap_seed": 2026,
+  "multiple_testing_adjustment": false,
+  "reported_generation_hours_rounded": 4.58,
+  "generation_time_excludes": [
+    "weight loading",
+    "GC",
+    "logging",
+    "queue time"
+  ],
+  "common_untruncated_hotpotqa_n": 56,
+  "untruncated_contrasts_supplied": true,
+  "notes": [
+    "Intervals copied from cluster CSV, not reconstructed from group means.",
+    "Full n80 runtime formula sums observed prefill/decode durations, despite generic extrapolation label.",
+    "No Slurm array ID, sacct, hardware log or per-example responses supplied.",
+    "All 39 sensitivity contrasts checked for internal point-estimate consistency; subset means are not available."
+  ],
+  "aggregate_file_sha256": {
+    "dataset_scores.csv": "e37b6ab7c1f753782b5331835cedff9922074e1ebe62593cfafa5613b98af764",
+    "paired_contrasts.csv": "c56f1a5276b9827e33f2fa4f548ee2dd623a963c380672913052faedbf799d63",
+    "dynamic_drift.csv": "afb5279c131e17908da06e595ebc4cb61a3aa355386712d2b488ced48e5298a7",
+    "untruncated_counts.csv": "c6ac0f06cbd5949c0257267f649ae478d8d5f2e3baa891e47edaff776a319597",
+    "untruncated_contrasts.csv": "9fd257cde6c541a9ea5f37f48198829b714f53569a93cc665121c729e0407173",
+    "baseline_subset_bounds.csv": "07eb3779e93abbe073170f251d0c95e83ac0b4d33385b99bd95e24dd567f74f1"
+  },
+  "untruncated_source": "User supplied untruncated_contrasts.csv as a separate chat reply",
+  "untruncated_scores_supplied": false
+}

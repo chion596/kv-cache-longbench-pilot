@@ -1,0 +1,7 @@
+model,dataset,n,different_output_ids,different_first_token,delta_pp
+qwen3-1.7b,passage_retrieval_en,80,3,1,1.25
+qwen3-1.7b,hotpotqa,80,2,0,-0.4166666666666667
+qwen3-4b,passage_retrieval_en,80,1,1,0.0
+qwen3-4b,hotpotqa,80,1,1,0.0
+smollm3-3b,passage_retrieval_en,80,3,0,0.0
+smollm3-3b,hotpotqa,80,0,0,0.0

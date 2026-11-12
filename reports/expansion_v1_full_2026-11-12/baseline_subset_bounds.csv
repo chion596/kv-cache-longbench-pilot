@@ -1,0 +1,7 @@
+model,protocol,full_n,subset_n,full_f1_pct,minimum_possible_subset_f1_pct,maximum_possible_subset_f1_pct,bound_type
+qwen3-1.7b,single_prefill,80,56,41.19971450118509,15.999592144550132,58.85673500169298,deterministic arithmetic bounds; not confidence intervals
+qwen3-1.7b,context_then_question,80,56,40.78304783451843,15.404354049312044,58.2614969064549,deterministic arithmetic bounds; not confidence intervals
+qwen3-4b,single_prefill,80,56,58.94993894993894,41.35705564276991,84.21419849991277,deterministic arithmetic bounds; not confidence intervals
+qwen3-4b,context_then_question,80,56,58.94993894993894,41.35705564276991,84.21419849991277,deterministic arithmetic bounds; not confidence intervals
+smollm3-3b,single_prefill,80,56,18.350059440773354,0.0,26.214370629676214,deterministic arithmetic bounds; not confidence intervals
+smollm3-3b,context_then_question,80,56,18.350059440773354,0.0,26.214370629676214,deterministic arithmetic bounds; not confidence intervals
