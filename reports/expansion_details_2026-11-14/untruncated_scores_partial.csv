@@ -1,0 +1,7 @@
+model,dataset,protocol,cache,n,documents,score_pct
+qwen3-1.7b,hotpotqa,context_then_question,dynamic,56,56,38.80102040816326
+qwen3-1.7b,hotpotqa,context_then_question,int4_g64,56,56,1.0064935064935063
+qwen3-4b,hotpotqa,context_then_question,dynamic,56,56,62.644557823129254
+qwen3-4b,hotpotqa,context_then_question,int4_g64,56,56,28.639455782312925
+smollm3-3b,hotpotqa,context_then_question,dynamic,56,56,19.211105803263944
+smollm3-3b,hotpotqa,context_then_question,int4_g64,56,56,16.812641366984376

@@ -1,0 +1,11 @@
+model,protocol,cache,n,official_score_pct,first_number_correct,dynamic_first_number_correct,baseline_correct_first_number_lost,first_number_recovered,delta_pp,cluster_ci95_low_pp,cluster_ci95_high_pp
+qwen3-1.7b,context_then_question,dynamic,80,92.5,74,74,0,0,0.0,0.0,0.0
+qwen3-1.7b,context_then_question,int4_g64,80,1.25,1,74,73,0,-91.25,-96.25,-85.0
+qwen3-4b,context_then_question,dynamic,80,97.5,78,78,0,0,0.0,0.0,0.0
+qwen3-4b,context_then_question,int4_g64,80,38.25,31,78,47,0,-58.75,-70.0,-47.5
+smollm3-3b,single_prefill,dynamic,80,84.58333333333336,75,75,0,0,0.0,0.0,0.0
+smollm3-3b,single_prefill,int4_g16,80,77.91666666666667,71,75,4,0,-5.0,-10.0,-1.25
+smollm3-3b,single_prefill,int4_g64,80,83.54166666666667,75,75,2,2,0.0,-5.0,5.0
+smollm3-3b,context_then_question,dynamic,80,84.58333333333336,75,75,0,0,0.0,0.0,0.0
+smollm3-3b,context_then_question,int4_g16,80,87.29166666666666,76,75,0,1,1.25,0.0,3.75
+smollm3-3b,context_then_question,int4_g64,80,80.83333333333334,72,75,3,0,-3.75,-8.75,0.0

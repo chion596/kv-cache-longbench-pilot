@@ -1,0 +1,19 @@
+{
+  "series": "kv_probe_v1",
+  "reference_series": "expansion_v1",
+  "models": ["qwen3-1.7b", "qwen3-4b"],
+  "dataset": "passage_retrieval_en",
+  "protocol": "context_then_question",
+  "policies": ["dynamic", "k_g32", "v_g32", "kv_g32", "k_g64", "v_g64", "kv_g64"],
+  "n": 20,
+  "smoke_n": 3,
+  "selection": "first 20 in the frozen expansion_v1 selection order, without filtering on outcomes",
+  "forced_prefix": "The abstract is from Paragraph ",
+  "target": "gold paragraph number, without punctuation or EOS",
+  "residual_length": 512,
+  "dtype": "float16",
+  "attention": "sdpa",
+  "primary_metric": "mean teacher-forced gold-number NLL in nats per token",
+  "secondary_metrics": ["summed gold-number NLL", "first number-token gold vs best other vocabulary logit margin"],
+  "bootstrap": "paired source context, 2000 replicates, seed 2026, nominal 95%, exploratory"
+}

@@ -1,0 +1,9 @@
+model,protocol,cache,n,official_f1_pct,first_line_f1_pct,first_line_better_count,first_line_worse_count,delta_pp,cluster_ci95_low_pp,cluster_ci95_high_pp
+smollm3-3b,single_prefill,dynamic,80,18.350059440773354,18.350059440773354,0,0,0.0,0.0,0.0
+smollm3-3b,single_prefill,int4_g16,80,17.690784320468822,17.690784320468822,0,0,0.0,0.0,0.0
+smollm3-3b,single_prefill,int4_g32,80,16.009660215815305,16.009660215815305,0,0,0.0,0.0,0.0
+smollm3-3b,single_prefill,int4_g64,80,16.775174659689107,16.775174659689107,0,0,0.0,0.0,0.0
+smollm3-3b,context_then_question,dynamic,80,18.350059440773354,18.350059440773354,0,0,0.0,0.0,0.0
+smollm3-3b,context_then_question,int4_g16,80,18.52666996792736,18.52666996792736,0,0,0.0,0.0,0.0
+smollm3-3b,context_then_question,int4_g32,80,17.172382895002176,17.172382895002176,0,0,0.0,0.0,0.0
+smollm3-3b,context_then_question,int4_g64,80,16.710268213951192,16.710268213951192,0,0,0.0,0.0,0.0

@@ -1,0 +1,54 @@
+{
+  "series": "kv_probe_v1",
+  "date": "2026-11-14",
+  "status": "local checks passed; production GPU smoke not run",
+  "environment": {
+    "device": "CPU",
+    "weights": "random tiny Qwen3, no pretrained weights",
+    "torch": "2.14.0",
+    "transformers": "5.17.0",
+    "hqq": "0.2.8.post1"
+  },
+  "unit_tests": 121,
+  "checks": [
+    "both g32/g64 logits exactly equal stock HQQ",
+    "exact-side bypass logits exactly equal Dynamic",
+    "untouched K or V stays bitwise equal to original tensor",
+    "refresh rejected",
+    "gold NLL aligned with ordinary full forward",
+    "matrix rejects altered targets, wrong quantized sides and failed stock parity"
+  ],
+  "tokenizer_precheck": [
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"
+    },
+    {
+      "model": "Qwen/Qwen3-4B",
+      "revision": "1cfa9a7208912126459214e8b04321603b3df60c"
+    }
+  ],
+  "forced_prefix": "The abstract is from Paragraph ",
+  "prefix_ids_both_models": [
+    785,
+    8115,
+    374,
+    504,
+    49351,
+    220
+  ],
+  "checked_numbers": {
+    "min": 1,
+    "max": 30,
+    "target_token_lengths": [
+      1,
+      2
+    ]
+  },
+  "limitations": [
+    "CPU FP32 checks do not establish FP16 HQQ CUDA parity on V100.",
+    "Hub tokenizer precheck does not attest actual cluster artifacts; preparation checks local model/tokenizer manifest.",
+    "No production inputs, outputs or GPU runtime supplied for this new series."
+  ],
+  "test_source_sha256": "a51f3d281b3ee1c73676e11fd3ff65591b38be032c9581125600be7e503bb2dd"
+}

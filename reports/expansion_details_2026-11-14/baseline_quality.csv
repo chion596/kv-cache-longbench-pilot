@@ -1,0 +1,7 @@
+model,protocol,n,official_f1_pct,official_full_f1_count,official_zero_count,first_line_full_f1_count,all_models_dynamic_full_f1_count,common_untruncated_n,common_untruncated_f1_pct
+qwen3-1.7b,single_prefill,80,41.19971450118509,25,38,25,2,56,38.80102040816326
+qwen3-1.7b,context_then_question,80,40.78304783451843,24,38,24,2,56,38.80102040816326
+qwen3-4b,single_prefill,80,58.94993894993894,39,26,39,2,56,62.644557823129254
+qwen3-4b,context_then_question,80,58.94993894993894,39,26,39,2,56,62.644557823129254
+smollm3-3b,single_prefill,80,18.350059440773354,2,22,2,2,56,19.211105803263944
+smollm3-3b,context_then_question,80,18.350059440773354,2,22,2,2,56,19.211105803263944

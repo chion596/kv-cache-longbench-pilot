@@ -1,0 +1,41 @@
+{
+  "series": "expansion_v1",
+  "snapshot_date": "2026-11-14",
+  "source": "User supplied stdout of python -m src.analyze_expansion",
+  "terminal_export_sha256": "71f05aaadffe2d4f6e1c7d5ab168a069fd9fd50d2e59695c40f5c07d985908a4",
+  "requested_analysis_code_commit": "f7c767454689758505d6f1c2ec74201ab016996e",
+  "cluster_analysis_code_commit_attested": false,
+  "raw_jsonl_independently_available_in_this_checkout": false,
+  "row_counts": {
+    "baseline_quality.csv": 6,
+    "untruncated_scores_partial.csv": 6,
+    "hotpot_format_smollm3.csv": 8,
+    "retrieval_first_number_partial.csv": 10
+  },
+  "complete_tables": [
+    "baseline_quality.csv",
+    "hotpot_format_smollm3.csv (SmolLM3 only)"
+  ],
+  "partial_tables": {
+    "untruncated_scores_partial.csv": "6 of 24 rows: split Dynamic/g64 only",
+    "retrieval_first_number_partial.csv": "10 of 24 rows printed by analyzer"
+  },
+  "verification": [
+    "Matched printed full means to published 48-cell table",
+    "Matched 3 subset g64 losses to supplied subset contrasts",
+    "Checked first-number counts, paired deltas, and interval ordering",
+    "All 8 SmolLM3 first-line mean/count differences equal zero"
+  ],
+  "notes": [
+    "Intervals copied from cluster stdout, not recomputed without per-question rows.",
+    "F1=1 is not exact match; common-baseline F1=1 subset is baseline-dependent and has only 2 documents per protocol.",
+    "First-line and first-number metrics are post-hoc diagnostics, not replacements for official scores.",
+    "No new GPU inference was performed for this analysis."
+  ],
+  "aggregate_file_sha256": {
+    "baseline_quality.csv": "b1481ee509a95497d24158ef795d2f5db064a80e6b919c7cc1e42d72d3621647",
+    "untruncated_scores_partial.csv": "cb7041e10d31455f27311f5ed5fcb668ff83b3caf21442037ac8a9ae3a746002",
+    "hotpot_format_smollm3.csv": "bf5723fd5588178b9a265d30abbec98ffb854384afc6d67f568fd1469e66af29",
+    "retrieval_first_number_partial.csv": "b54e16e1e89e90c764e10056cde80c3116957ada72d5c9dd86f0c6aca4930430"
+  }
+}
