@@ -21,18 +21,22 @@ CPU-диагностика завершена:
 Аудит кластера прошёл: 159 JSONL, 7 669 записей, ошибок нет.
 Основные и subset-интервалы expansion_v1 опубликованы в reports/expansion_v1_full_2026-11-12/.
 
-Следующий шаг: только smoke отдельной серии kv_probe_v1.
+Smoke kv_probe_v1 пройден: 14 ячеек, 42 основные оценки,
+точное совпадение со stock HQQ, refresh отсутствует.
+Результат: docs/kv_probe_smoke_2026-11-14.md.
+
+Следующий шаг: full отдельной серии kv_probe_v1.
   git pull --ff-only
   module load python
   conda activate kvcache
-  bash tools/start_kv_probe.sh smoke
+  bash tools/start_kv_probe.sh full
 
 После завершения Slurm:
-  python -m src.score_kv_probe --phase smoke
+  python -m src.score_kv_probe --phase full
+  cat results/kv_probe_v1/summary/full/paired_contrasts.csv
 
-Ожидается 14 ячеек, 42 основные оценки, точное совпадение со stock HQQ.
-Full (280 оценок) отправляется отдельно после успешного smoke.
-На кластере kv_probe_v1 пока не запускалась.
+Ожидается 14 ячеек, 280 основных оценок и 40 парных контрастов.
+Грубая оценка основных forward по smoke: 0.30 GPU-часа, без накладных расходов.
 Протокол и ограничения: docs/kv_probe_protocol_2026-11-14.md.
 
 Для повторения CPU-разбора expansion_v1 на login-узле:

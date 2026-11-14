@@ -1,0 +1,47 @@
+{
+  "series": "kv_probe_v1",
+  "phase": "smoke",
+  "snapshot_date": "2026-11-14",
+  "source": "User supplied stdout of python -m src.score_kv_probe --phase smoke",
+  "terminal_export_sha256": "00d663c88bde0c739e2546844fad6d79c450e4fd91279a4ef0e86b733f4e5bde",
+  "requested_runner_code_commit": "3f5bdb2be0128c1a7c4e76111e258ff45663e364",
+  "cluster_runner_code_commit_attested": false,
+  "matrix_cells": 14,
+  "main_evaluations": 42,
+  "n_per_cell": 3,
+  "additional_reference_evaluations_in_protocol": 18,
+  "scorer_reports": [
+    "complete matrix",
+    "common prefix and target",
+    "selective HQQ calls",
+    "no refresh",
+    "exact both vs stock HQQ logits parity",
+    "exact-side bypass vs Dynamic parity"
+  ],
+  "printed_expansion_query_token_mismatches": 0,
+  "raw_jsonl_independently_available_in_this_checkout": false,
+  "estimated_full_main_probe_gpu_hours": 0.2985052279951223,
+  "timing_excludes": [
+    "model loading",
+    "GC",
+    "additional parity runs",
+    "logging outside evaluate",
+    "queue time"
+  ],
+  "checks": [
+    "14 unique model/policy cells with n=3",
+    "finite nonnegative NLL/timing and bounded counts",
+    "zero printed reference token mismatches",
+    "recomputed runtime estimate agrees with rounded scorer output"
+  ],
+  "limitations": [
+    "Smoke validates implementation, not a population quality or mechanism conclusion.",
+    "Per-document records, runtime provenance, Slurm logs, and paired contrasts not supplied.",
+    "First number-token top1 is not full paragraph-number accuracy.",
+    "Timing extrapolation uses only 3 documents per model; no speed comparison or confidence interval."
+  ],
+  "aggregate_file_sha256": {
+    "dataset_scores.csv": "dbf4657486786c7ca0eb7fee2cc710915856d768f15f6a049ba242ba29bb82bf",
+    "runtime_estimate.csv": "22de79a129a320f7e7c2df5852e6e6e948748c654f8e68869139c460319cf1e7"
+  }
+}

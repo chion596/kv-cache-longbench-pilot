@@ -1,0 +1,3 @@
+model,smoke_main_probe_seconds,estimated_full_main_probe_seconds
+qwen3-1.7b,65.1638976270333,434.4259841802219
+qwen3-4b,96.02892549033277,640.1928366022184

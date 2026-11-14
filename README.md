@@ -4,26 +4,30 @@
 Изучаем качество, память и чувствительность HQQ QuantizedCache к размеру группы,
 модели и протоколу генерации. Эксперименты выполняются на V100 кластера ВШЭ.
 
-**14 ноября: CPU-разбор завершён; подготовлен отдельный контроль K и V.**
+**14 ноября: CPU-разбор завершён; smoke отдельного контроля K и V пройден.**
 На общей необрезанной подвыборке HotpotQA Dynamic F1: 62.64% у Qwen3-4B
 и 19.21% у SmolLM3. Первая строка не исправляет SmolLM3 F1. Провал Qwen
 в retrieval сохраняется по правильности первого номера абзаца.
 [Диагностика](docs/expansion_diagnostics_2026-11-14.md).
 
-Следующий запуск — только smoke нового teacher-forced K/V-контроля:
+Следующий запуск — full teacher-forced K/V-контроля на 20 документах:
 
 ```bash
 git pull --ff-only
 module load python
 conda activate kvcache
-bash tools/start_kv_probe.sh smoke
+bash tools/start_kv_probe.sh full
 # После завершения Slurm:
-python -m src.score_kv_probe --phase smoke
+python -m src.score_kv_probe --phase full
+cat results/kv_probe_v1/summary/full/paired_contrasts.csv
 ```
 
-Это 42 основные пробы и 18 сверок реализации. Full (280 проб) отправляется
-отдельно после успешного smoke. [Условия и команды](docs/kv_probe_protocol_2026-11-14.md).
-На кластере новая серия пока не запускалась.
+Smoke завершён: 42 основные пробы и предусмотренные сверки реализации,
+точное совпадение со stock HQQ, refresh отсутствует. Full — 280 основных проб;
+грубая оценка их forward по smoke — 0.30 GPU-часа без накладных расходов.
+[Результат smoke](docs/kv_probe_smoke_2026-11-14.md)
+· [Условия и команды](docs/kv_probe_protocol_2026-11-14.md).
+Выводы о механизме по трём документам пока не обобщаем.
 
 **12 ноября: expansion_v1 завершена — 48 ячеек, 3 840 ответов на новых документах.**
 У Qwen3-1.7B g64 дополнительная потеря при split составляет −25.97 п.п.
