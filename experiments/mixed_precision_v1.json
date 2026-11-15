@@ -1,0 +1,19 @@
+{
+  "series": "mixed_precision_v1",
+  "reference_series": "expansion_v1",
+  "models": ["qwen3-1.7b", "qwen3-4b"],
+  "datasets": ["passage_retrieval_en", "hotpotqa"],
+  "policies": ["dynamic", "k4_v4", "k8_v4", "k4_v8", "k16_v4"],
+  "protocol": "context_then_question",
+  "n": 80,
+  "smoke_n": 3,
+  "group_size": 64,
+  "residual_length": 512,
+  "dtype": "float16",
+  "attention": "sdpa",
+  "max_new_tokens": 32,
+  "primary_comparison": "k8_v4-k4_v8, native official score at equal measured cache GPU bytes after query",
+  "secondary_comparisons": "k8_v4-k4_v4; k16_v4-k4_v4; own fresh Dynamic controls",
+  "sampling": "all 80 frozen expansion_v1 contexts per dataset, same inputs, no forced prefix",
+  "bootstrap": "paired context, 2000 iterations, seed 2026, nominal 95%, exploratory"
+}

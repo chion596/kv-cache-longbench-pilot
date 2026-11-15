@@ -12,19 +12,27 @@
 [Полный разбор и график](docs/kv_probe_results_2026-11-15.md)
 · [Средние и 40 контрастов](reports/kv_probe_full_2026-11-15/).
 
-Следующий шаг — CPU-диагностика сохранённых проб:
+Следующий шаг — только smoke смешанной точности:
 
 ```bash
 git pull --ff-only
 module load python
 conda activate kvcache
-python -m src.analyze_kv_probe
+bash tools/start_mixed_precision.sh smoke
+# После завершения всех четырёх Slurm job:
+python -m src.score_mixed_precision --phase smoke
 ```
 
-Новых GPU-вычислений нет. Скрипт проверяет концентрацию NLL на отдельных
-документах, считает прямой both−K и связывает forced-пробу с прежним native
-первым номером. Следующий GPU-план — [смешанная точность K8/V4 и K4/V8](docs/mixed_precision_plan_2026-11-15.md)
-при измеренном бюджете cache и свободной генерации; runner ещё не реализован.
+CPU-диагностика завершена: g64-потеря сохраняется при исключении любого одного
+документа. У 4B в семи native-ошибках gold-токены имеют p>1/2 после forced
+prefix; у 1.7B g64 таких случаев нет. [Подробный разбор](docs/kv_probe_diagnostics_2026-11-15.md).
+
+Подготовлена [mixed_precision_v1](docs/mixed_precision_protocol_2026-11-15.md):
+K8/V4 против K4/V8 при измеренном бюджете cache, плюс K16/V4 и свежие
+Dynamic/K4/V4, свободная генерация. Smoke — **20 ячеек, 60 основных ответов**,
+полная серия — **1 600 ответов**. GPU smoke новой серии ещё не запускался.
+Full отправляется отдельно после сверок stock HQQ 4/8, exact/Dynamic,
+нужной битности и равенства GPU cache bytes K8/V4–K4/V8 на каждом входе.
 
 **14 ноября: CPU-разбор expansion_v1 завершён.**
 На общей необрезанной подвыборке HotpotQA Dynamic F1: 62.64% у Qwen3-4B

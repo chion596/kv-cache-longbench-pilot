@@ -29,15 +29,21 @@ Full kv_probe_v1 завершён: 14 ячеек, 280 оценок, 40 конт�
 Основная чувствительность g64 локализуется в K для проверенной постановки.
 Полный отчёт: docs/kv_probe_results_2026-11-15.md.
 
-Следующий шаг на login-узле: CPU-разбор сохранённых K/V-проб.
+CPU-разбор K/V завершён: docs/kv_probe_diagnostics_2026-11-15.md.
+
+Следующий шаг: только smoke mixed_precision_v1.
   git pull --ff-only
   module load python
   conda activate kvcache
-  python -m src.analyze_kv_probe
+  bash tools/start_mixed_precision.sh smoke
 
-Новых GPU-вычислений нет. CSV: results/kv_probe_v1/details/full/.
-Следующий GPU-план: docs/mixed_precision_plan_2026-11-15.md.
-Его runner пока не реализован; команды запуска новой серии ещё нет.
+После завершения четырёх Slurm job:
+  python -m src.score_mixed_precision --phase smoke
+
+Ожидаются 20 ячеек и 60 основных ответов. Обязательны stock/exact-сверки,
+нужная битность, отсутствие refresh и равные GPU cache bytes K8/V4–K4/V8.
+Full (1 600 ответов) отправляется отдельно после успешного smoke.
+Протокол новой серии: docs/mixed_precision_protocol_2026-11-15.md.
 Протокол и ограничения: docs/kv_probe_protocol_2026-11-14.md.
 
 Для повторения CPU-разбора expansion_v1 на login-узле:

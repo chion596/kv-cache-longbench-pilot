@@ -1,0 +1,46 @@
+{
+  "series": "mixed_precision_v1",
+  "date": "2026-11-15",
+  "status": "local checks passed; production GPU smoke not run",
+  "local_environment": {
+    "device": "CPU",
+    "inference_dtype": "float32",
+    "versions": {
+      "torch": "2.14.0",
+      "transformers": "5.17.0",
+      "hqq": "0.2.8.post1"
+    }
+  },
+  "tests_passed": 131,
+  "checks": [
+    "Native decoder matches original greedy implementation for Dynamic and INT4",
+    "Full trajectory logits/output IDs match stock HQQ 4/8 and exact vs Dynamic",
+    "Per-side metadata reports actual packed 4/8 bit precision; exact CPU states are FP32",
+    "K8/V4 and K4/V8 have equal measured cache storage bytes on the tiny model",
+    "Storage aliases, metadata and empty views counted once by storage address/device",
+    "EOS and refresh guards tested",
+    "Full preparation/preflight from sealed parent is idempotent and detects source changes",
+    "Matrix rejects mismatched memory budget, precision, snapshot, environment and missing results"
+  ],
+  "source_hashes": {
+    "mixed_precision.py": "b4d78e608e17a24e2b2653753ae7124f12306bbf3914388e4248dbfca93d6580",
+    "mixed_cache.py": "4b034ad7e89a351458bea6047e2c617087719118c2e1a3fdf2f70248e27767e8",
+    "prepare_mixed_precision.py": "9695ccd70eb6d0ac8c69e330647099081670e227581aec2fd709acb46780e29c",
+    "run_mixed_precision.py": "af03306c71547f2298ec8ac77840f5bead0f7ba0baf5c1609db8be8ce2f4c548",
+    "score_mixed_precision.py": "a3279e94f7b0141b378513f7120c80b6c5c5d8949368d664074f7f7ae8e4c4fc",
+    "run_quality.py": "1f601f1bc84ba42cbf73b5d755c4be984dbed2748dae96c4e33e2621d3c16d35",
+    "run_expansion.py": "13cd7ed90f38622be7f301fd994260d6a501fc3f29b9a9d2cb3104805af6e56d",
+    "expansion.py": "d15f298b379c0f1ff7103d93d51ea7aa69cc3b53b583f90ec816faf4e0b0666c",
+    "protocol.py": "7e97807008fd5c696e73ade965440a998b5662dd8403ba8348aefd65ebc0ba66",
+    "run_protocol.py": "e9869b01e7d1724ad7bcd51a85300341b22512289f730cc34354e8b94e4e05f0",
+    "common.py": "cc4d914a0333e5919622f99d3a41dfb9822a8114ef466d4aa89a280a4fa38001",
+    "transformers.cache_utils": "702144bb44553f6339ea1bf23c8205a708bb5f8c7c09cb3a2db484182646743c",
+    "hqq.core.quantize": "a76a054ba4382d9552f563c468296771cddf53dcd9f4ce6655f94fe18e653daa"
+  },
+  "test_file_sha256": "dba2a247f3fd39e1e703f2aa9e11349ce09f7182ff7e2ec94aa677966fb92334",
+  "limitations": [
+    "Random tiny CPU Qwen3 does not establish production FP16 CUDA HQQ parity.",
+    "No pretrained weights or real source documents processed locally for this new series.",
+    "GPU quality, actual cache sizes and runtime are pending cluster smoke."
+  ]
+}

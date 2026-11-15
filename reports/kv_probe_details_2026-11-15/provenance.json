@@ -1,0 +1,36 @@
+{
+  "series": "kv_probe_v1",
+  "snapshot_date": "2026-11-15",
+  "source": "User supplied src.analyze_kv_probe stdout",
+  "source_sha256": "9a354468b44f8aa7cd25100595c469d01623d8a528ae550c4f04ba3ba42eaf38",
+  "requested_code_commit": "9b6c13296a59664962d20054726746d7ac014004",
+  "cluster_code_commit_attested": false,
+  "row_counts": {
+    "effect_spread_partial.csv": 4,
+    "free_vs_forced.csv": 6,
+    "additional_contrasts_partial.csv": 10
+  },
+  "tables_partial": {
+    "effect_spread_partial.csv": "4 of 12 rows, both only",
+    "additional_contrasts_partial.csv": "10 of 32 rows, selected NLL only"
+  },
+  "raw_per_document_records_available": false,
+  "common_dynamic_first_token_correct_n": 19,
+  "verification": [
+    "Compared full-set point differences with published means",
+    "Checked LOO ranges, count bounds, native/high-gold contingency bounds, CI ordering",
+    "Subset contrasts supplied for 19 baseline-dependent contexts; not recomputed"
+  ],
+  "notes": [
+    "Intervals copied, not recomputed from aggregates.",
+    "LOO ranges are sensitivity measures, not confidence intervals.",
+    "All-gold p>1/2 does not check number ending or EOS and is not a native answer score.",
+    "No new GPU inference in this analysis."
+  ],
+  "aggregate_file_sha256": {
+    "effect_spread_partial.csv": "d1c1b8ec6ac4b7174f4ee6fb72fa6bc1141d9f514e592cb59cc7bab375106727",
+    "free_vs_forced.csv": "c018bcedda3011227fafc132cd56d9b2efdc976ce56a6057793f03408184affb",
+    "additional_contrasts_partial.csv": "d6e8dce5cbec2dc3bdfc84387a03d0713f68a05fe102f30b95a9b1e3be448c67"
+  },
+  "source_export_starts_after_analysis_header": true
+}

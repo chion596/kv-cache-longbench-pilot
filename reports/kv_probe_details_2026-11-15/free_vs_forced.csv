@@ -1,0 +1,7 @@
+model,policy,n,native_first_number_correct,forced_first_number_token_top1_correct,all_gold_number_tokens_p_above_half_count,native_wrong_and_all_gold_tokens_p_above_half,query_token_mismatch_with_native
+qwen3-1.7b,dynamic,20,18,19,18,0,0
+qwen3-1.7b,kv_g32,20,12,15,12,1,0
+qwen3-1.7b,kv_g64,20,1,7,0,0,0
+qwen3-4b,dynamic,20,20,20,20,0,0
+qwen3-4b,kv_g32,20,20,20,20,0,0
+qwen3-4b,kv_g64,20,7,15,14,7,0
