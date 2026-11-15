@@ -1,0 +1,48 @@
+{
+  "series": "kv_probe_v1",
+  "phase": "full",
+  "snapshot_date": "2026-11-15",
+  "source": "User supplied full scorer stdout and paired_contrasts.csv",
+  "terminal_export_sha256": "167683fd4bcf91dc03462e83db78fb99a1dbef265c5108a52fe630374f9a872c",
+  "requested_checkout_commit": "7516f7a731a9af373f5be93edcac6b31cf225ed6",
+  "published_inference_source_commit": "3f5bdb2be0128c1a7c4e76111e258ff45663e364",
+  "cluster_commit_independently_attested": false,
+  "matrix_cells": 14,
+  "main_evaluations": 280,
+  "questions_per_cell": 20,
+  "unique_source_contexts": 20,
+  "raw_jsonl_independently_available_in_this_checkout": false,
+  "printed_reference_query_token_mismatches": 0,
+  "observed_main_forward_gpu_hours": 0.282333089385712,
+  "bootstrap_iterations": 2000,
+  "bootstrap_seed": 2026,
+  "ci_nominal_level": 0.95,
+  "multiple_testing_adjustment": false,
+  "verification": [
+    "14 unique n20 model/policy summaries",
+    "40 unique contrasts matched to point arithmetic",
+    "finite values, count bounds and CI ordering checked",
+    "runtime sum matches printed rounded 0.282 GPU-hours"
+  ],
+  "scorer_reports": [
+    "full matrix validated",
+    "common prefix and target",
+    "selective HQQ calls",
+    "no refresh"
+  ],
+  "limitations": [
+    "All confidence intervals copied from cluster output; no bootstrap recomputed from group means.",
+    "These are 20 contexts already used in expansion_v1, not a new independent dataset.",
+    "Full output does not reprint stock logits parity; it was supplied in the earlier smoke.",
+    "First number-token top1 is not full number accuracy; gold punctuation and EOS unmeasured.",
+    "Full runtime formula sums observed main forward durations; excludes loading, GC, logging outside evaluate and queue.",
+    "No per-document rows, Slurm logs or resident-cache memory measurements supplied."
+  ],
+  "aggregate_file_sha256": {
+    "dataset_scores.csv": "87052cc94613422a9c054a4badd04b01195eae172cef7bdd90674f0eaacc965c",
+    "paired_contrasts.csv": "0be9b48dc5e783e823f04f328cd364d137a5da04b6c2842260f34efd077843be",
+    "runtime.csv": "86ba3afa48b75fc991c8fc9e43ce0f12a5aba47762971ffc138470aeb2b89db8"
+  },
+  "figure_sha256": "a4ed5ddcaa4d28a94671ce7a4b004e31e7921b5e0ab6b1cafbc2ce81ec746203",
+  "figure_source_sha256": "1bf97190ea6402290acb5108da669cfcefb9e4c8fde7e071d6aaf24c234ad7fe"
+}

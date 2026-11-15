@@ -25,18 +25,19 @@ Smoke kv_probe_v1 пройден: 14 ячеек, 42 основные оценк�
 точное совпадение со stock HQQ, refresh отсутствует.
 Результат: docs/kv_probe_smoke_2026-11-14.md.
 
-Следующий шаг: full отдельной серии kv_probe_v1.
+Full kv_probe_v1 завершён: 14 ячеек, 280 оценок, 40 контрастов.
+Основная чувствительность g64 локализуется в K для проверенной постановки.
+Полный отчёт: docs/kv_probe_results_2026-11-15.md.
+
+Следующий шаг на login-узле: CPU-разбор сохранённых K/V-проб.
   git pull --ff-only
   module load python
   conda activate kvcache
-  bash tools/start_kv_probe.sh full
+  python -m src.analyze_kv_probe
 
-После завершения Slurm:
-  python -m src.score_kv_probe --phase full
-  cat results/kv_probe_v1/summary/full/paired_contrasts.csv
-
-Ожидается 14 ячеек, 280 основных оценок и 40 парных контрастов.
-Грубая оценка основных forward по smoke: 0.30 GPU-часа, без накладных расходов.
+Новых GPU-вычислений нет. CSV: results/kv_probe_v1/details/full/.
+Следующий GPU-план: docs/mixed_precision_plan_2026-11-15.md.
+Его runner пока не реализован; команды запуска новой серии ещё нет.
 Протокол и ограничения: docs/kv_probe_protocol_2026-11-14.md.
 
 Для повторения CPU-разбора expansion_v1 на login-узле:
