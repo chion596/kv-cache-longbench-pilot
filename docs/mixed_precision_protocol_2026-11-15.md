@@ -1,4 +1,8 @@
-**mixed_precision_v1 подготовлена, 15 ноября 2026 года. На кластере ещё не запускалась.**
+**mixed_precision_v1: smoke пройден, 15 ноября 2026 года. Следующий шаг — full.**
+
+[Результаты smoke](mixed_precision_smoke_2026-11-15.md): 20 ячеек, 60 основных
+ответов, stock/exact-сверки и равенство фактических budgets пройдены.
+Полные результаты ещё не получены; ниже — условия и команды воспроизведения.
 
 [Мотивация и CPU-результаты](kv_probe_diagnostics_2026-11-15.md)
 · [Фиксированная матрица](../experiments/mixed_precision_v1.json)
@@ -38,8 +42,8 @@ Forced-префикса ответа нет. `query + max_new_tokens < residual`
 Новый ручной split/greedy decoder локально сверен с прежним decoder для
 Dynamic и INT4, включая EOS. HQQ 4/8, обход обеих сторон, разные K/V bits,
 memory-budget equality и alias-deduplication проверены на маленькой CPU-Qwen.
-Это проверка кода в FP32; совместимость FP16/CUDA на реальных весах ещё
-должна пройти GPU smoke.
+Это локальная проверка кода в FP32. Совместимость FP16/CUDA на реальных
+весах подтверждена присланным полным stdout GPU smoke.
 
 **Что измеряем как память.** После вопроса, до первого decode-forward:
 

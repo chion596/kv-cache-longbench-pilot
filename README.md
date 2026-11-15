@@ -12,15 +12,26 @@
 [Полный разбор и график](docs/kv_probe_results_2026-11-15.md)
 · [Средние и 40 контрастов](reports/kv_probe_full_2026-11-15/).
 
-Следующий шаг — только smoke смешанной точности:
+Smoke смешанной точности пройден: 20 ячеек, 60 основных ответов,
+stock/exact-сверки и равенство GPU cache bytes K8/V4–K4/V8 на каждом входе.
+Все 24 source baseline-пары совпали по output IDs с expansion_v1.
+[Результат smoke и память](docs/mixed_precision_smoke_2026-11-15.md).
+
+Следующий шаг — full смешанной точности:
 
 ```bash
 git pull --ff-only
 module load python
 conda activate kvcache
-bash tools/start_mixed_precision.sh smoke
-# После завершения всех четырёх Slurm job:
-python -m src.score_mixed_precision --phase smoke
+bash tools/start_mixed_precision.sh full
+```
+
+После завершения всех четырёх Slurm job:
+
+```bash
+python -m src.score_mixed_precision --phase full
+cat results/mixed_precision_v1/summary/full/paired_contrasts.csv
+cat results/mixed_precision_v1/summary/full/untruncated_contrasts.csv
 ```
 
 CPU-диагностика завершена: g64-потеря сохраняется при исключении любого одного
@@ -29,10 +40,10 @@ prefix; у 1.7B g64 таких случаев нет. [Подробный раз
 
 Подготовлена [mixed_precision_v1](docs/mixed_precision_protocol_2026-11-15.md):
 K8/V4 против K4/V8 при измеренном бюджете cache, плюс K16/V4 и свежие
-Dynamic/K4/V4, свободная генерация. Smoke — **20 ячеек, 60 основных ответов**,
-полная серия — **1 600 ответов**. GPU smoke новой серии ещё не запускался.
-Full отправляется отдельно после сверок stock HQQ 4/8, exact/Dynamic,
-нужной битности и равенства GPU cache bytes K8/V4–K4/V8 на каждом входе.
+Dynamic/K4/V4, свободная генерация. Полная серия — **1 600 ответов**.
+По smoke основные native forward оцениваются примерно в **2.04 GPU-часа**,
+без загрузки моделей, GC, reference-сверок и очереди. Качество по трём
+документам не обобщаем; все пять политик остаются в фиксированной матрице.
 
 **14 ноября: CPU-разбор expansion_v1 завершён.**
 На общей необрезанной подвыборке HotpotQA Dynamic F1: 62.64% у Qwen3-4B

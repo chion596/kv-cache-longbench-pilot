@@ -31,18 +31,23 @@ Full kv_probe_v1 завершён: 14 ячеек, 280 оценок, 40 конт�
 
 CPU-разбор K/V завершён: docs/kv_probe_diagnostics_2026-11-15.md.
 
-Следующий шаг: только smoke mixed_precision_v1.
+Smoke mixed_precision_v1 пройден: 20 ячеек, 60 основных ответов,
+stock/exact-сверки, нужная битность, нет refresh, равные K8/V4–K4/V8 bytes.
+Результат: docs/mixed_precision_smoke_2026-11-15.md.
+
+Следующий шаг: full mixed_precision_v1.
   git pull --ff-only
   module load python
   conda activate kvcache
-  bash tools/start_mixed_precision.sh smoke
+  bash tools/start_mixed_precision.sh full
 
 После завершения четырёх Slurm job:
-  python -m src.score_mixed_precision --phase smoke
+  python -m src.score_mixed_precision --phase full
+  cat results/mixed_precision_v1/summary/full/paired_contrasts.csv
+  cat results/mixed_precision_v1/summary/full/untruncated_contrasts.csv
 
-Ожидаются 20 ячеек и 60 основных ответов. Обязательны stock/exact-сверки,
-нужная битность, отсутствие refresh и равные GPU cache bytes K8/V4–K4/V8.
-Full (1 600 ответов) отправляется отдельно после успешного smoke.
+Ожидаются 20 ячеек, 1 600 ответов и 28 основных контрастов.
+Грубая оценка основных forward по smoke: 2.04 GPU-часа без накладных расходов.
 Протокол новой серии: docs/mixed_precision_protocol_2026-11-15.md.
 Протокол и ограничения: docs/kv_probe_protocol_2026-11-14.md.
 

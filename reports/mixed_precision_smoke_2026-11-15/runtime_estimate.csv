@@ -1,0 +1,5 @@
+model,dataset,observed_smoke_main_seconds,estimated_full_main_seconds
+qwen3-1.7b,passage_retrieval_en,60.572377966484055,1615.2634124395747
+qwen3-1.7b,hotpotqa,58.480189664056525,1559.4717243748407
+qwen3-4b,passage_retrieval_en,79.72855269815773,2126.0947386175394
+qwen3-4b,hotpotqa,76.22290149866603,2032.6107066310942

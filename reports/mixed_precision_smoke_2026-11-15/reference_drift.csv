@@ -1,0 +1,9 @@
+model,dataset,policy,n,different_output_ids,different_first_token,score_delta_vs_expansion_pp
+qwen3-1.7b,passage_retrieval_en,dynamic,3,0,0,0.0
+qwen3-1.7b,passage_retrieval_en,k4_v4,3,0,0,0.0
+qwen3-1.7b,hotpotqa,dynamic,3,0,0,0.0
+qwen3-1.7b,hotpotqa,k4_v4,3,0,0,0.0
+qwen3-4b,passage_retrieval_en,dynamic,3,0,0,0.0
+qwen3-4b,passage_retrieval_en,k4_v4,3,0,0,0.0
+qwen3-4b,hotpotqa,dynamic,3,0,0,0.0
+qwen3-4b,hotpotqa,k4_v4,3,0,0,0.0

@@ -1,0 +1,43 @@
+{
+  "series": "mixed_precision_v1",
+  "phase": "smoke",
+  "snapshot_date": "2026-11-15",
+  "source": "User supplied full smoke scorer stdout",
+  "source_sha256": "679cdbb8ef59ecfd044f18595b93f79b3ccfa9f90dda3444dd123e2a009aaa93",
+  "requested_runner_commit": "7ef10c61caae23bddb8fb49c6501f21dab19446e",
+  "cluster_commit_independently_attested": false,
+  "matrix_cells": 20,
+  "main_smoke_answers": 60,
+  "n_per_cell": 3,
+  "additional_reference_generations_in_protocol": 48,
+  "scorer_reports": [
+    "per-input K8/V4 and K4/V8 GPU cache byte equality",
+    "actual per-layer precision verified",
+    "no refresh",
+    "full greedy logits parity with stock HQQ 4/8 and exact vs Dynamic"
+  ],
+  "source_baseline_pairs_reported_identical": 24,
+  "local_checks": [
+    "20 unique n3 model/dataset/policy summaries",
+    "8 unique n3 baseline drift summaries all zero",
+    "Matched printed K8/V4 and K4/V8 mean memory and ratio in all four model/dataset groups",
+    "Recomputed runtime extrapolation matches printed 2.037 GPU-hours"
+  ],
+  "estimated_full_main_gpu_hours": 2.037066828350847,
+  "raw_per_document_records_available_locally": false,
+  "notes": [
+    "Quality on three contexts is not generalized; all five policies remain fixed for full.",
+    "Per-input byte equality and logits checks are reported by cluster scorer; raw tensors were not supplied.",
+    "GPU cache storage bytes exclude weights, allocator reserve and transient dequantized buffers.",
+    "Memory ratio is mean of per-input ratios, not necessarily ratio of group means.",
+    "Full runtime estimate excludes model load, GC, additional parity checks and queue; main controls in smoke also copy logits for verification.",
+    "No speed or total-GPU-memory saving claim is made from these summaries.",
+    "No paired contrast CSV or confidence intervals supplied for smoke."
+  ],
+  "aggregate_file_sha256": {
+    "dataset_scores.csv": "af1b58ecedd824e67b78f81b0d469728e4063cb24a58adb7b433fde03744bd15",
+    "reference_drift.csv": "65b87bec330c3a9ad270240855ce46d83dd6bf5d75b2dda6d0c5b78b2ebbdbdf",
+    "untruncated_counts.csv": "8e0c57e62c21320e0ed5f807e2329870e6b3f89f72b03ce16b16651d855ead21",
+    "runtime_estimate.csv": "5b15bdda8202df5ddfabc1ba58009cd118c8a9da957fc120e2afd0a8508effb8"
+  }
+}
