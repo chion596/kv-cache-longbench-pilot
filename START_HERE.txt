@@ -35,19 +35,18 @@ Smoke mixed_precision_v1 пройден: 20 ячеек, 60 основных от
 stock/exact-сверки, нужная битность, нет refresh, равные K8/V4–K4/V8 bytes.
 Результат: docs/mixed_precision_smoke_2026-11-15.md.
 
-Следующий шаг: full mixed_precision_v1.
+Full mixed_precision_v1 завершён: 20 ячеек, 1 600 ответов, 28 основных
+и 14 untruncated-контрастов. Отчёт: docs/mixed_precision_results_2026-11-17.md.
+
+Следующий шаг на login-узле: CPU-preflight независимых ZH-контекстов.
   git pull --ff-only
   module load python
   conda activate kvcache
-  bash tools/start_mixed_precision.sh full
+  bash tools/check_zh_confirmation.sh
 
-После завершения четырёх Slurm job:
-  python -m src.score_mixed_precision --phase full
-  cat results/mixed_precision_v1/summary/full/paired_contrasts.csv
-  cat results/mixed_precision_v1/summary/full/untruncated_contrasts.csv
-
-Ожидаются 20 ячеек, 1 600 ответов и 28 основных контрастов.
-Грубая оценка основных forward по smoke: 2.04 GPU-часа без накладных расходов.
+GPU не запускается. Нужны 120 новых context и query+32 < residual512
+для обеих моделей. JSON: results/zh_confirmation_preflight_2026-11-17.json.
+План: docs/confirmation_plan_2026-11-17.md.
 Протокол новой серии: docs/mixed_precision_protocol_2026-11-15.md.
 Протокол и ограничения: docs/kv_probe_protocol_2026-11-14.md.
 

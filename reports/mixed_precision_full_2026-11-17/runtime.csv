@@ -1,0 +1,5 @@
+model,dataset,main_forward_seconds
+qwen3-1.7b,passage_retrieval_en,1404.2179095430765
+qwen3-1.7b,hotpotqa,1333.7875262873713
+qwen3-4b,passage_retrieval_en,2054.6290747637395
+qwen3-4b,hotpotqa,2105.6274674937595

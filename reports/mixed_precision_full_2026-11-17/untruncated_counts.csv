@@ -1,0 +1,3 @@
+dataset,n,common_untruncated_n
+passage_retrieval_en,80,80
+hotpotqa,80,56

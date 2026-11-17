@@ -1,0 +1,53 @@
+{
+  "series": "mixed_precision_v1",
+  "phase": "full",
+  "snapshot_date": "2026-11-17",
+  "source": "User supplied full scorer stdout and two contrast CSVs",
+  "source_sha256": "1e25c01a5a6d9256154e13b06c1b3d7b001fceef22ae800085b0917831ae3735",
+  "requested_checkout_commit": "fba6ddb62ae87c04d6e1540795317bff50549fb0",
+  "published_inference_source_commit": "7ef10c61caae23bddb8fb49c6501f21dab19446e",
+  "cluster_commit_independently_attested": false,
+  "matrix_cells": 20,
+  "answers": 1600,
+  "n_per_cell": 80,
+  "unique_contexts_per_dataset": 80,
+  "source_baseline_output_pairs_reported_identical": 640,
+  "scorer_reports": [
+    "per-input K8/V4 and K4/V8 GPU cache bytes equal",
+    "actual bits checked",
+    "no refresh"
+  ],
+  "checks": [
+    "20 unique n80 summaries",
+    "28 main point contrasts matched to means",
+    "14 subset contrasts checked for CI ordering and 6 internal point relations",
+    "printed equal-memory means checked",
+    "baseline drift counts all zero",
+    "runtime sum matches rounded output"
+  ],
+  "common_untruncated_hotpotqa_n": 56,
+  "main_forward_gpu_hours": 1.9161838828022075,
+  "bootstrap_iterations": 2000,
+  "bootstrap_seed": 2026,
+  "ci_nominal_level": 0.95,
+  "multiplicity_adjustment": false,
+  "raw_per_document_records_available_locally": false,
+  "limitations": [
+    "All CIs copied from supplied output, not recomputed without per-document data.",
+    "Same development contexts as expansion_v1; no new independent validation set.",
+    "Cache storage measurement excludes weights, allocator reserve and transient buffers.",
+    "Timing includes cache traversal, excludes loading/GC/queue; varying outputs and no repetitions preclude a speed claim.",
+    "Zero empirical bootstrap interval is not population equivalence or a bound on unseen rare losses.",
+    "No full subset absolute means, resident storage records or Slurm logs supplied."
+  ],
+  "aggregate_file_sha256": {
+    "dataset_scores.csv": "e5d0671310c6d137d7d9d00f0a4bce5862cd83753fa336ef7bfc3ef2588e84de",
+    "paired_contrasts.csv": "2ed625a1f92f341d4db706090949eb74ae501e83bddbae3dc93b1b4a50a0300f",
+    "untruncated_contrasts.csv": "1060c45abecfbeb6c19f5957379f3d512ac40d9beef2c5a79213178952c062cd",
+    "reference_drift.csv": "45bc7ae5dc7db0675bfd6912038e6e212a9f92827163befd813639393f7e1d90",
+    "untruncated_counts.csv": "44256bc0a96afe244bbe744fd7f9a1f783771201ff6952bd993cd5dc0aff5e35",
+    "runtime.csv": "18fe095ccd0fb5c3efe98ca5b0293cd90af3f099cf6ebd62eda8d2292d54079d"
+  },
+  "figure_sha256": "5cd9d06c9719d969623064a644571c403c386a63f9f55af8634a6df4363be1d3",
+  "figure_source_sha256": "0aab35ee1d43707fe538207d403cd2c88bdad8db6ed4c763c9650558623483e2"
+}
