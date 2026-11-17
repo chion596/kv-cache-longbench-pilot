@@ -38,17 +38,26 @@ stock/exact-сверки, нужная битность, нет refresh, рав�
 Full mixed_precision_v1 завершён: 20 ячеек, 1 600 ответов, 28 основных
 и 14 untruncated-контрастов. Отчёт: docs/mixed_precision_results_2026-11-17.md.
 
-Следующий шаг на login-узле: CPU-preflight независимых ZH-контекстов.
+CPU-preflight ZH завершён 18 ноября: 120 новых контекстов доступны,
+335 JSONL / 14 475 записей, ошибок нет. Один query+32=847 требует residual >847.
+Для отдельной zh_confirmation_v1 выбран общий residual1024; случаев не исключаем.
+Результат: docs/zh_preflight_results_2026-11-18.md.
+
+Следующий шаг: CPU-фиксация прежнего preview и только ZH smoke через Slurm.
+  cd ~/kv-cache-longbench-pilot
   git pull --ff-only
   module load python
   conda activate kvcache
-  bash tools/check_zh_confirmation.sh
+  bash tools/start_zh_confirmation.sh smoke
 
-GPU не запускается. Нужны 120 новых context и query+32 < residual512
-для обеих моделей. JSON: results/zh_confirmation_preflight_2026-11-17.json.
-План: docs/confirmation_plan_2026-11-17.md.
-Протокол новой серии: docs/mixed_precision_protocol_2026-11-15.md.
-Протокол и ограничения: docs/kv_probe_protocol_2026-11-14.md.
+После завершения двух job:
+  python -m src.score_zh_confirmation --phase smoke
+
+Ожидаются 8 ячеек / 24 ответа, stock/exact сверки, нет refresh, равные primary bytes.
+Smoke включает самый длинный query815. Full отдельно после проверки smoke: 960 ответов.
+Протокол новой серии: docs/zh_confirmation_protocol_2026-11-18.md.
+Прежний preview JSON сохраняется: results/zh_confirmation_preflight_2026-11-17.json.
+После фиксации prepared старый preview повторно не запускаем.
 
 Для повторения CPU-разбора expansion_v1 на login-узле:
   python -m src.analyze_expansion

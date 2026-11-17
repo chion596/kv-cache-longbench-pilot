@@ -1,0 +1,5 @@
+model,dataset,n,score_lower_count,score_equal_count,score_higher_count,output_ids_identical,mean_score_delta_pp
+qwen3-1.7b,passage_retrieval_en,80,0,80,0,62,0.0
+qwen3-1.7b,hotpotqa,80,2,75,3,70,-0.6321778711484595
+qwen3-4b,passage_retrieval_en,80,0,80,0,78,0.0
+qwen3-4b,hotpotqa,80,1,78,1,78,-0.3125000000000001

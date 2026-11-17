@@ -12,18 +12,27 @@ resident KV cache Dynamic; среднее качество близко к Dynam
 [Полный результат и график](docs/mixed_precision_results_2026-11-17.md)
 · [Средние и 42 main/subset контраста](reports/mixed_precision_full_2026-11-17/).
 
-Следующий шаг — CPU-проверка новых ZH-контекстов и длин вопросов:
+**18 ноября: CPU-проверка ZH завершена.** Доступны 120 новых контекстов;
+один длинный вопрос требует residual >847. Для отдельной `zh_confirmation_v1`
+зафиксирован общий **residual1024**, все случаи сохранены. Матрица full —
+960 ответов, GPU ещё не запускался. [Результат CPU](docs/zh_preflight_results_2026-11-18.md)
+· [Протокол и ограничения](docs/zh_confirmation_protocol_2026-11-18.md).
+
+Следующий шаг — CPU-фиксация той же выборки и только ZH smoke через Slurm:
 
 ```bash
 git pull --ff-only
 module load python
 conda activate kvcache
-bash tools/check_zh_confirmation.sh
+bash tools/start_zh_confirmation.sh smoke
 ```
 
-GPU не запускается. Скрипт проверяет актуальную историю и предлагает 120
-новых exact context, без отбора по качеству. Он также печатает поэлементное
-сравнение K8/V4–Dynamic завершённой серии. [План независимой проверки](docs/confirmation_plan_2026-11-17.md).
+После двух job: `python -m src.score_zh_confirmation --phase smoke`.
+Ожидаются 8 ячеек / 24 основных ответа; full отправляется отдельно после
+разбора проверок. Smoke включает query815 и stock/exact сверки. На EN
+retrieval score K8/V4 совпал с Dynamic по каждому из 80 случаев у обеих
+моделей, хотя output IDs иногда различаются; новые документы нужны для
+проверки переноса. [Первоначальный план](docs/confirmation_plan_2026-11-17.md).
 
 **15 ноября: K/V-контроль завершён — 280 оценок на 20 документах.**
 При g64 прямой K-only−V-only контраст NLL: +4.64 [3.18; 6.02] у Qwen3-1.7B

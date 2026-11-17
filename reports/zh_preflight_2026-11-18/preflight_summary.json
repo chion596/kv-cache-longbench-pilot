@@ -1,0 +1,25 @@
+{
+  "dataset": "passage_retrieval_zh",
+  "total_questions": 200,
+  "total_contexts": 200,
+  "excluded_question_indices": 0,
+  "unused_question_indices": 200,
+  "eligible_questions_on_new_contexts": 200,
+  "eligible_contexts": 200,
+  "preview_n": 120,
+  "history_coverage": "published_and_local",
+  "history_jsonl_files": 335,
+  "recognized_history_rows": 14475,
+  "history_scan_errors": 0,
+  "local_history_ready": true,
+  "all_query_budgets_fit_residual512": false,
+  "cluster_preflight_path": "results/zh_confirmation_preflight_2026-11-17.json",
+  "decision": {
+    "new_series": "zh_confirmation_v1",
+    "residual_length": 1024,
+    "retain_all_120_preview_contexts": true,
+    "freeze_on_cluster_pending": true,
+    "gpu_smoke_completed": false,
+    "gpu_full_completed": false
+  }
+}

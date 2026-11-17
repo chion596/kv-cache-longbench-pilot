@@ -19,6 +19,12 @@ retrieval score совпал со средним Dynamic, HotpotQA F1 близо
 они не пересчитаны без per-document записей. Raw JSONL, GPU storage records,
 Slurm logs и cluster commit hash здесь независимо не получены.
 
+**Дополнение 18 ноября:** [поэлементная CPU-сводка](zh_preflight_results_2026-11-18.md)
+подтвердила одинаковый score K8/V4 и Dynamic на каждом retrieval-случае
+обеих моделей (80/80); output IDs совпали в 62/80 и 78/80. На QA есть
+2 и 1 ухудшение соответственно. Подготовлена новая ZH-серия с residual1024;
+условия и результаты завершённой EN-серии сохранены.
+
 **Условия.** Qwen3-1.7B/4B × retrieval EN/HotpotQA × Dynamic/K4V4/K8V4/K4V8/K16V4,
 по 80 контекстов на набор; native chat без thinking, context_then_question,
 FP16/SDPA, HQQ axes=1, group=64, residual=512, ответ до 32 токенов.
@@ -117,11 +123,16 @@ K4/V8: 7/80 и 12/80. У 4B QA K4/V4 достигает EOS в 73/80, но F1 о
 
 **Следующий приоритет — перенос на новые контексты.**
 
-Подготовлена CPU-проверка кандидатов для [ZH confirmation](confirmation_plan_2026-11-17.md):
+Актуальные команды после полученного CPU-preflight:
+[ZH confirmation, residual1024](zh_confirmation_protocol_2026-11-18.md).
+Ниже сохранён шаг от 17 ноября, который уже выполнен; повторять preview
+после фиксации новых prepared inputs не требуется.
+
+17 ноября была подготовлена CPU-проверка кандидатов для [ZH confirmation](confirmation_plan_2026-11-17.md):
 120 новых passage_retrieval_zh context, две Qwen, четыре заранее выбранные
 политики Dynamic/K4V4/K8V4/K4V8 — потенциально 960 новых ответов. Точная
-доступность, длины query и достаточность residual512 ещё не проверены на
-текущем кластере; исходные веса и архив локально для этого не загружались.
+доступность, длины query и достаточность residual512 на тот момент ещё
+не были проверены на кластере; исходные веса и архив локально для этого не загружались.
 
 ```bash
 cd ~/kv-cache-longbench-pilot

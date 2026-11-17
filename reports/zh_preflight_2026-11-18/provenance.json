@@ -1,0 +1,17 @@
+{
+  "source": "User-supplied stdout of src.check_zh_confirmation, received 2026-11-18",
+  "expected_repository_commit": "da5969dc4a34c791268fe127f2c2be1db6aa799a",
+  "cluster_commit_attested": false,
+  "raw_preflight_json_received": false,
+  "raw_task_and_output_records_received": false,
+  "limitations": [
+    "No preview source indices or context hashes were included in stdout; they remain in the cluster JSON and will be checked during freezing.",
+    "Published aggregates are transcribed from supplied stdout, not an independent cluster rerun.",
+    "Equal per-case scores do not imply equal output IDs or equivalence on unseen documents."
+  ],
+  "files_sha256": {
+    "native_pairs.csv": "06ee82ea536dd13463db83239e8d17e81b743968fb28401897e7f05900323e7c",
+    "preflight_summary.json": "27d4a22769e45083926411a3e9a2b78e5fe2297d4e3f7f5b3bd5a0254fca464b",
+    "tokenizer_budgets.csv": "83747102e3f90ce0e3ae28cf56aad1d5cd5032466b9ea89a651dfd81d030b969"
+  }
+}
