@@ -1,0 +1,39 @@
+{
+  "source": "User-supplied stdout of python -m src.score_zh_confirmation --phase smoke, received 2026-11-21",
+  "series": "zh_confirmation_v1",
+  "phase": "smoke",
+  "expected_code_commit": "fff1308626e047e2bed4e3fa501f432130aaf991",
+  "cluster_code_commit_attested": false,
+  "raw_jsonl_received": false,
+  "cluster_job_ids_received": false,
+  "matrix_cells": 8,
+  "native_answers": 24,
+  "models": [
+    "qwen3-1.7b",
+    "qwen3-4b"
+  ],
+  "dataset": "passage_retrieval_zh",
+  "documents_per_cell": 3,
+  "selection": "predeclared stress smoke; includes longest query; not a random quality sample",
+  "checks_reported_by_cluster_scorer": [
+    "residual1024",
+    "correct bit policy",
+    "no refresh",
+    "equal K8/V4 and K4/V8 GPU cache bytes per input",
+    "stock HQQ 4/8 parity",
+    "exact/Dynamic parity"
+  ],
+  "scope": "Technical smoke passed; quality and runtime estimates are exploratory only and do not estimate the 120-document full result.",
+  "limitations": [
+    "Percentile bootstrap with n=3 is not useful evidence for population effects; degenerate intervals can reflect a discrete resampling sample.",
+    "Three selected documents are not three independent benchmark draws from the target pool.",
+    "Cache snapshot excludes model weights, allocator reserve and transient dequantized tensors.",
+    "Prefill/decode timings vary with output length and single-run conditions and are not a speed benchmark."
+  ],
+  "attachment_sha256": "76545f944fb9121842beff1264c3044c10fb2373e1449cc54b78b7af2f140c53",
+  "artifact_sha256": {
+    "dataset_scores.csv": "c42571196ebdaff9442721dc2d918ca457bc3d0570f2c5902c87c932c30da106",
+    "memory_budget.csv": "9fa908eac25fc580df047477008aee1ae731f3fe664993d37fbc2fa3a93a8620",
+    "paired_contrasts.csv": "ee36348b6e1d7b42ec18b742897dbd439bf8d3bd9a6826c0b94537fb8913c876"
+  }
+}

@@ -1,0 +1,3 @@
+model,dataset,n,k8_v4_mean_cache_mib,k4_v8_mean_cache_mib,equal_bytes_count,max_absolute_bytes_difference,k8_v4_ratio_vs_dynamic,k4_v8_ratio_vs_dynamic
+qwen3-1.7b,passage_retrieval_zh,3,263.1197916666667,263.1197916666667,3,0,0.44616857296089335,0.44616857296089335
+qwen3-4b,passage_retrieval_zh,3,338.296875,338.296875,3,0,0.44616857296089335,0.44616857296089335

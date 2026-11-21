@@ -1,0 +1,11 @@
+model,dataset,comparison,role,n,documents,delta_pp,ci_level,ci_low_pp,ci_high_pp,nominal95_low_pp,nominal95_high_pp,multiplicity
+qwen3-1.7b,passage_retrieval_zh,k8_v4-k4_v8,primary,3,3,100.0,0.975,100.0,100.0,100.0,100.0,"Bonferroni, 2 primary contrasts"
+qwen3-1.7b,passage_retrieval_zh,k8_v4-dynamic,secondary,3,3,0.0,0.95,0.0,0.0,0.0,0.0,exploratory_unadjusted
+qwen3-1.7b,passage_retrieval_zh,k4_v8-dynamic,secondary,3,3,-100.0,0.95,-100.0,-100.0,-100.0,-100.0,exploratory_unadjusted
+qwen3-1.7b,passage_retrieval_zh,k4_v4-dynamic,secondary,3,3,-100.0,0.95,-100.0,-100.0,-100.0,-100.0,exploratory_unadjusted
+qwen3-1.7b,passage_retrieval_zh,k8_v4-k4_v4,secondary,3,3,100.0,0.95,100.0,100.0,100.0,100.0,exploratory_unadjusted
+qwen3-4b,passage_retrieval_zh,k8_v4-k4_v8,primary,3,3,33.333333333333336,0.975,0.0,100.0,0.0,100.0,"Bonferroni, 2 primary contrasts"
+qwen3-4b,passage_retrieval_zh,k8_v4-dynamic,secondary,3,3,0.0,0.95,0.0,0.0,0.0,0.0,exploratory_unadjusted
+qwen3-4b,passage_retrieval_zh,k4_v8-dynamic,secondary,3,3,-33.333333333333336,0.95,-100.0,0.0,-100.0,0.0,exploratory_unadjusted
+qwen3-4b,passage_retrieval_zh,k4_v4-dynamic,secondary,3,3,-33.333333333333336,0.95,-100.0,0.0,-100.0,0.0,exploratory_unadjusted
+qwen3-4b,passage_retrieval_zh,k8_v4-k4_v4,secondary,3,3,33.333333333333336,0.95,0.0,100.0,0.0,100.0,exploratory_unadjusted

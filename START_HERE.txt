@@ -43,21 +43,26 @@ CPU-preflight ZH завершён 18 ноября: 120 новых контекс
 Для отдельной zh_confirmation_v1 выбран общий residual1024; случаев не исключаем.
 Результат: docs/zh_preflight_results_2026-11-18.md.
 
-Следующий шаг: CPU-фиксация прежнего preview и только ZH smoke через Slurm.
+Следующий шаг — ZH full через Slurm:
   cd ~/kv-cache-longbench-pilot
   git pull --ff-only
   module load python
   conda activate kvcache
-  bash tools/start_zh_confirmation.sh smoke
+  bash tools/start_zh_confirmation.sh full
 
-После завершения двух job:
-  python -m src.score_zh_confirmation --phase smoke
+ZH smoke завершён: 8 ячеек / 24 ответа, stock/exact сверки прошли,
+refresh не было, primary bytes равны. Самый длинный query815 прошёл.
+Качество smoke только техническое; на трёх stress-примерах его не обобщаем.
+Отчёт: docs/zh_confirmation_smoke_2026-11-21.md.
 
-Ожидаются 8 ячеек / 24 ответа, stock/exact сверки, нет refresh, равные primary bytes.
-Smoke включает самый длинный query815. Full отдельно после проверки smoke: 960 ответов.
+После двух job:
+  python -m src.score_zh_confirmation --phase full
+
 Протокол новой серии: docs/zh_confirmation_protocol_2026-11-18.md.
 Прежний preview JSON сохраняется: results/zh_confirmation_preflight_2026-11-17.json.
 После фиксации prepared старый preview повторно не запускаем.
+
+Полная хронология и объяснение решений: docs/история_экспериментов_и_аудит_2026-11-21.txt.
 
 Для повторения CPU-разбора expansion_v1 на login-узле:
   python -m src.analyze_expansion

@@ -15,24 +15,30 @@ resident KV cache Dynamic; среднее качество близко к Dynam
 **18 ноября: CPU-проверка ZH завершена.** Доступны 120 новых контекстов;
 один длинный вопрос требует residual >847. Для отдельной `zh_confirmation_v1`
 зафиксирован общий **residual1024**, все случаи сохранены. Матрица full —
-960 ответов, GPU ещё не запускался. [Результат CPU](docs/zh_preflight_results_2026-11-18.md)
+960 ответов. [Результат CPU](docs/zh_preflight_results_2026-11-18.md)
 · [Протокол и ограничения](docs/zh_confirmation_protocol_2026-11-18.md).
 
-Следующий шаг — CPU-фиксация той же выборки и только ZH smoke через Slurm:
+**21 ноября: ZH smoke завершён — 8 ячеек, 24 основных ответа.** Длинный
+query прошёл, residual1024 и cache parity проверены; качество на трёх
+stress-примерах не переносим на full. [Разбор smoke и агрегаты](docs/zh_confirmation_smoke_2026-11-21.md).
+
+Следующий шаг — full ZH: 960 ответов через Slurm:
 
 ```bash
 git pull --ff-only
 module load python
 conda activate kvcache
-bash tools/start_zh_confirmation.sh smoke
+bash tools/start_zh_confirmation.sh full
 ```
 
-После двух job: `python -m src.score_zh_confirmation --phase smoke`.
-Ожидаются 8 ячеек / 24 основных ответа; full отправляется отдельно после
-разбора проверок. Smoke включает query815 и stock/exact сверки. На EN
-retrieval score K8/V4 совпал с Dynamic по каждому из 80 случаев у обеих
+После двух job: `python -m src.score_zh_confirmation --phase full`.
+Full отправляется отдельно от smoke и включает 120 новых контекстов.
+На EN retrieval score K8/V4 совпал с Dynamic по каждому из 80 случаев у обеих
 моделей, хотя output IDs иногда различаются; новые документы нужны для
 проверки переноса. [Первоначальный план](docs/confirmation_plan_2026-11-17.md).
+
+История экспериментов по цепочке «вопрос → проверка → результат» собрана
+в отдельном [текстовом аудите](docs/история_экспериментов_и_аудит_2026-11-21.txt).
 
 **15 ноября: K/V-контроль завершён — 280 оценок на 20 документах.**
 При g64 прямой K-only−V-only контраст NLL: +4.64 [3.18; 6.02] у Qwen3-1.7B
