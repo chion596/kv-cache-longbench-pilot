@@ -24,18 +24,18 @@ def main():
                 r = data[model, f'{side}_g{group}-dynamic']
                 value, low, high = (float(r[k]) for k in ('delta', 'cluster_ci95_low', 'cluster_ci95_high'))
                 ax.errorbar(value, y, xerr=[[value-low], [high-value]], fmt='o', color=color, capsize=4, markersize=6)
-            ax.set_title(f'{title} · group {group}')
+            ax.set_title(f'{title} · группа {group}')
             ax.axvline(0, color='#555555', linewidth=0.8)
-            ax.set_yticks([0, 1, 2], ['K only', 'V only', 'K + V'])
+            ax.set_yticks([0, 1, 2], ['Только K', 'Только V', 'K + V'])
             ax.set_xlim(-0.4, 6.8)
             ax.set_ylim(2.5, -0.5)
             ax.grid(axis='x', alpha=0.2)
             ax.spines[['top', 'right']].set_visible(False)
             if i == 1:
-                ax.set_xlabel('Gold-number NLL change vs Dynamic (nats/token)')
-    fig.suptitle('Selective K/V quantization under a common forced answer prefix', fontsize=13, y=0.98)
-    fig.text(0.5, 0.035, '20 previously studied retrieval contexts · FP16/SDPA, HQQ INT4, residual 512 · No refresh\n'
-             '95% paired document-bootstrap CIs, unadjusted · Higher NLL means worse conditional prediction',
+                ax.set_xlabel('Δ NLL (нат/токен)')
+    fig.suptitle('Раздельное сжатие K/V при одинаковом начале ответа', fontsize=13, y=0.98)
+    fig.text(0.5, 0.035, '20 документов из прежней серии поиска абзаца · FP16/SDPA, HQQ INT4, residual 512 · Повторного сжатия нет\n'
+             'Относительно Dynamic · Парные 95% bootstrap-интервалы без поправки · Чем выше NLL, тем хуже предсказание',
              ha='center', fontsize=9, color='#555555')
     fig.subplots_adjust(left=0.09, right=0.98, top=0.89, bottom=0.18, hspace=0.35, wspace=0.15)
     path = root/'kv_nll_effects.svg'

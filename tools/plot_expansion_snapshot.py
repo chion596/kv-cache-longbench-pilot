@@ -19,11 +19,11 @@ def main():
     matplotlib.rcParams.update({'font.size': 10, 'svg.fonttype': 'none', 'svg.hashsalt': 'expansion-full-20261112'})
     fig, axes = plt.subplots(3, 2, figsize=(11, 10), sharex=True, sharey=True)
     for i, (model, model_title) in enumerate((('qwen3-1.7b', 'Qwen3-1.7B'), ('qwen3-4b', 'Qwen3-4B'), ('smollm3-3b', 'SmolLM3-3B'))):
-        for j, (dataset, title) in enumerate((('passage_retrieval_en', 'Retrieval EN'), ('hotpotqa', 'HotpotQA'))):
+        for j, (dataset, title) in enumerate((('passage_retrieval_en', 'Поиск абзаца (англ.)'), ('hotpotqa', 'HotpotQA'))):
             ax = axes[i, j]
             for protocol, label, color, offset, marker in (
-                    ('single_prefill', 'Whole prompt', '#ce701a', -0.035, 'o'),
-                    ('context_then_question', 'Context then question', '#226eac', 0.035, 's')):
+                    ('single_prefill', 'Весь текст', '#ce701a', -0.035, 'o'),
+                    ('context_then_question', 'Сначала документ, затем вопрос', '#226eac', 0.035, 's')):
                 rows = [data[(model, dataset, protocol, f'int4_g{g}-dynamic')] for g in (16, 32, 64)]
                 values = [float(r['delta_pp']) for r in rows]
                 error = [[v-float(r['cluster_ci95_low_pp']) for r, v in zip(rows, values)],
@@ -39,14 +39,14 @@ def main():
             ax.set_axisbelow(True)
             ax.spines[['top', 'right']].set_visible(False)
             if j == 0:
-                ax.set_ylabel('Score change vs own Dynamic (pp)')
+                ax.set_ylabel('Изменение оценки (п.п.)')
             if i == 2:
-                ax.set_xlabel('HQQ INT4 group size')
+                ax.set_xlabel('Размер группы HQQ INT4')
     handles, labels = axes[0, 0].get_legend_handles_labels()
-    fig.suptitle('New documents: prefill sensitivity repeats and transfers to QA', fontsize=14, y=0.985)
+    fig.suptitle('Новые документы: влияние подачи повторилось и проявилось в QA', fontsize=14, y=0.985)
     fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 0.955), ncol=2, frameon=False)
-    fig.text(0.5, 0.023, '80 new exact contexts per dataset · Residual 512, no refresh · Native chat, FP16/SDPA\n'
-             '95% paired document-bootstrap CIs; unadjusted · SmolLM3 HotpotQA baseline: 18.35 F1',
+    fig.text(0.5, 0.023, '80 новых контекстов на набор · Residual 512, повторного сжатия нет · Родной шаблон чата, FP16/SDPA\n'
+             'Парные 95% bootstrap-интервалы без поправки · Базовый F1 SmolLM3 на HotpotQA: 18,35',
              ha='center', va='bottom', fontsize=9, color='#555555')
     fig.subplots_adjust(left=0.09, right=0.98, top=0.88, bottom=0.12, hspace=0.32, wspace=0.16)
     path = root/'quality_effects.svg'

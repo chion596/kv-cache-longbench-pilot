@@ -24,11 +24,11 @@ def main():
     rows = {(r["model"], r["dataset"], r["protocol"]): r for r in rows
             if r["comparison"] == "int4_g64-dynamic"}
     models = (("qwen3-1.7b", "Qwen3-1.7B"), ("qwen3-4b", "Qwen3-4B"), ("smollm3-3b", "SmolLM3-3B"))
-    protocols = (("single_prefill", "Whole prompt", "#ce701a", -0.14, "o"),
-                 ("context_then_question", "Context then question", "#226eac", 0.14, "s"))
+    protocols = (("single_prefill", "Весь текст", "#ce701a", -0.14, "o"),
+                 ("context_then_question", "Сначала документ, затем вопрос", "#226eac", 0.14, "s"))
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.8), sharex=True)
     for ax, dataset, title in zip(axes, ("passage_retrieval_en", "multifieldqa_en"),
-                                  ("Passage retrieval EN", "MultiFieldQA EN")):
+                                  ("Поиск абзаца (англ.)", "MultiFieldQA (англ.)")):
         for protocol, label, color, offset, marker in protocols:
             values, lower, upper = [], [], []
             for name, _ in models:
@@ -50,14 +50,14 @@ def main():
         ax.xaxis.set_major_locator(MultipleLocator(25))
         ax.grid(axis="x", alpha=0.22)
         ax.set_axisbelow(True)
-        ax.set_xlabel("Score change: INT4 g64 − Dynamic (pp)")
+        ax.set_xlabel("Изменение оценки: INT4 g64 − Dynamic (п.п.)")
         ax.set_title(title, fontsize=13, pad=12)
         ax.spines[["top", "right"]].set_visible(False)
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.53, 0.91), ncol=2, frameon=False)
-    fig.suptitle("HQQ INT4 g64: robustness depends on the prefill protocol", fontsize=15, y=0.99)
-    fig.text(0.5, 0.025, "80 questions per cell · 95% paired document-bootstrap CIs · 2,000 resamples\n"
-             "Native chat, thinking disabled · Exploratory intervals without multiplicity adjustment",
+    fig.suptitle("HQQ INT4 g64: результат зависит от способа подачи текста", fontsize=15, y=0.99)
+    fig.text(0.5, 0.025, "80 вопросов на ячейку · Парные 95% bootstrap-интервалы по документам · 2 000 повторов\n"
+             "Родной шаблон чата, режим размышлений выключен · Без поправки на множественные сравнения",
              ha="center", va="bottom", fontsize=9, color="#555555")
     fig.subplots_adjust(left=0.12, right=0.98, top=0.76, bottom=0.23, wspace=0.45)
     svg = Path(args.svg)

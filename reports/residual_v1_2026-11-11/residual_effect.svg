@@ -148,7 +148,7 @@ L 646.4 51.84
      </g>
     </g>
     <g id="text_8">
-     <text style="font-size: 11px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="439.2" y="296.470281" transform="rotate(-0 439.2 296.470281)">Retrieval score change: residual 512 − 128 (pp)</text>
+     <text style="font-size: 11px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="439.2" y="296.470281" transform="rotate(-0 439.2 296.470281)">Изменение оценки поиска: residual 512 − 128 (п.п.)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -328,12 +328,12 @@ L 705.6 266.112
     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="525.9" y="241.368195" transform="rotate(-0 525.9 241.368195)">+1.25 [-8.12, +11.25]</text>
    </g>
    <g id="text_17">
-    <text style="font-size: 14px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="439.2" y="35.84" transform="rotate(-0 439.2 35.84)">Suppressing refresh: score changes and remaining uncertainty</text>
+    <text style="font-size: 14px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="439.2" y="35.84" transform="rotate(-0 439.2 35.84)">Повторное сжатие отключено: изменение оценки и неопределённость</text>
    </g>
   </g>
   <g id="text_18">
-   <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; fill: #555555" transform="translate(239.139141 324.429539)">80 paired documents per cell · Split prefill · HQQ INT4</text>
-   <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; fill: #555555" transform="translate(171.260156 335.232)">95% document-bootstrap CIs · Exploratory intervals without multiplicity adjustment</text>
+   <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; fill: #555555" transform="translate(179.137969 324.429539)">80 парных документов на ячейку · Подача «документ → вопрос» · HQQ INT4</text>
+   <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; fill: #555555" transform="translate(131.751563 335.232)">Парные 95% bootstrap-интервалы по документам · Без поправки на множественные сравнения</text>
   </g>
  </g>
  <defs>

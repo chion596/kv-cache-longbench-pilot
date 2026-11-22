@@ -248,7 +248,7 @@ L 401.678491 104.306087
      </g>
     </g>
     <g id="text_7">
-     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="26.450469" y="160.184348" transform="rotate(-90 26.450469 160.184348)">Score change vs fresh Dynamic (pp)</text>
+     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="26.450469" y="160.184348" transform="rotate(-90 26.450469 160.184348)">Изменение оценки (п.п.)</text>
     </g>
    </g>
    <g id="LineCollection_1">
@@ -444,7 +444,7 @@ L 401.678491 234.688696
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_8">
-    <text style="font-size: 12px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="234.499245" y="79.68" transform="rotate(-0 234.499245 79.68)">Qwen3-1.7B · Retrieval EN</text>
+    <text style="font-size: 12px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="234.499245" y="79.68" transform="rotate(-0 234.499245 79.68)">Qwen3-1.7B · Поиск абзаца (англ.)</text>
    </g>
   </g>
   <g id="axes_2">
@@ -905,7 +905,7 @@ L 382.010344 279.391304
      </g>
     </g>
     <g id="text_19">
-     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="234.499245" y="456.998438" transform="rotate(-0 234.499245 456.998438)">Mean resident KV cache / Dynamic (%)</text>
+     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="234.499245" y="457.16875" transform="rotate(-0 234.499245 457.16875)">Объём KV-cache / Dynamic (%)</text>
     </g>
    </g>
    <g id="matplotlib.axis_6">
@@ -1000,7 +1000,7 @@ L 401.678491 298.017391
      </g>
     </g>
     <g id="text_26">
-     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="26.450469" y="353.895652" transform="rotate(-90 26.450469 353.895652)">Score change vs fresh Dynamic (pp)</text>
+     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="26.450469" y="353.895652" transform="rotate(-90 26.450469 353.895652)">Изменение оценки (п.п.)</text>
     </g>
    </g>
    <g id="LineCollection_11">
@@ -1119,7 +1119,7 @@ L 401.678491 428.4
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_27">
-    <text style="font-size: 12px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="234.499245" y="273.391304" transform="rotate(-0 234.499245 273.391304)">Qwen3-4B · Retrieval EN</text>
+    <text style="font-size: 12px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="234.499245" y="273.391304" transform="rotate(-0 234.499245 273.391304)">Qwen3-4B · Поиск абзаца (англ.)</text>
    </g>
   </g>
   <g id="axes_4">
@@ -1268,7 +1268,7 @@ L 756.491853 279.391304
      </g>
     </g>
     <g id="text_37">
-     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="608.980755" y="456.998438" transform="rotate(-0 608.980755 456.998438)">Mean resident KV cache / Dynamic (%)</text>
+     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="608.980755" y="457.16875" transform="rotate(-0 608.980755 457.16875)">Объём KV-cache / Dynamic (%)</text>
     </g>
    </g>
    <g id="matplotlib.axis_8">
@@ -1465,11 +1465,11 @@ L 776.16 428.4
    </g>
   </g>
   <g id="text_39">
-   <text style="font-size: 14px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="396" y="18.197812" transform="rotate(-0 396 18.197812)">Same cache bytes, different quality when bits go to K or V</text>
+   <text style="font-size: 14px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="396" y="18.43625" transform="rotate(-0 396 18.43625)">При равном объёме кэша точность K и V по-разному влияет на качество</text>
   </g>
   <g id="text_40">
-   <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; fill: #555555" transform="translate(209.019375 480.093539)">80 development contexts per task · Native split prefill, HQQ group 64, residual 512</text>
-   <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; fill: #555555" transform="translate(143.416406 490.896)">95% paired context-bootstrap CIs, unadjusted · Cache excludes weights, allocator reserve and transient tensors</text>
+   <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; fill: #555555" transform="translate(147.821484 479.940258)">80 контекстов из рабочей выборки на задачу · Подача документ → вопрос, HQQ, группа 64, residual 512</text>
+   <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; fill: #555555" transform="translate(129.81375 490.896)">Парные 95% bootstrap-интервалы без поправки · Кэш измерен после вопроса, без весов и временных тензоров</text>
   </g>
   <g id="legend_1">
    <g id="LineCollection_21">

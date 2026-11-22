@@ -161,7 +161,7 @@ L 360.099539 97.512164
      </g>
     </g>
     <g id="text_7">
-     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="23.930469" y="166.526609" transform="rotate(-90 23.930469 166.526609)">Score change vs own Dynamic (pp)</text>
+     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="23.930469" y="166.526609" transform="rotate(-90 23.930469 166.526609)">Изменение оценки (п.п.)</text>
     </g>
    </g>
    <g id="LineCollection_1">
@@ -283,7 +283,7 @@ L 360.099539 254.429217
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_8">
-    <text style="font-size: 12px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="212.44977" y="72.624" transform="rotate(-0 212.44977 72.624)">Qwen3-1.7B · Retrieval EN</text>
+    <text style="font-size: 12px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="212.44977" y="72.624" transform="rotate(-0 212.44977 72.624)">Qwen3-1.7B · Поиск абзаца (англ.)</text>
    </g>
   </g>
   <g id="axes_2">
@@ -480,7 +480,7 @@ L 705.6 254.429217
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_9">
-    <text style="font-size: 12px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="557.95023" y="72.624" transform="rotate(-0 557.95023 72.624)">Qwen3-1.7B · QA EN</text>
+    <text style="font-size: 12px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="557.95023" y="72.624" transform="rotate(-0 557.95023 72.624)">Qwen3-1.7B · MultiFieldQA (англ.)</text>
    </g>
   </g>
   <g id="axes_3">
@@ -524,7 +524,7 @@ z
      </g>
     </g>
     <g id="text_13">
-     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="212.44977" y="511.574438" transform="rotate(-0 212.44977 511.574438)">HQQ INT4 group size</text>
+     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="212.44977" y="511.573656" transform="rotate(-0 212.44977 511.573656)">Размер группы HQQ INT4</text>
     </g>
    </g>
    <g id="matplotlib.axis_6">
@@ -619,7 +619,7 @@ L 360.099539 326.058946
      </g>
     </g>
     <g id="text_20">
-     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="23.930469" y="395.073391" transform="rotate(-90 23.930469 395.073391)">Score change vs own Dynamic (pp)</text>
+     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="23.930469" y="395.073391" transform="rotate(-90 23.930469 395.073391)">Изменение оценки (п.п.)</text>
     </g>
    </g>
    <g id="LineCollection_5">
@@ -710,7 +710,7 @@ L 360.099539 482.976
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_21">
-    <text style="font-size: 12px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="212.44977" y="301.170783" transform="rotate(-0 212.44977 301.170783)">Qwen3-4B · Retrieval EN</text>
+    <text style="font-size: 12px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="212.44977" y="301.170783" transform="rotate(-0 212.44977 301.170783)">Qwen3-4B · Поиск абзаца (англ.)</text>
    </g>
   </g>
   <g id="axes_4">
@@ -754,7 +754,7 @@ z
      </g>
     </g>
     <g id="text_25">
-     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="557.95023" y="511.574438" transform="rotate(-0 557.95023 511.574438)">HQQ INT4 group size</text>
+     <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="557.95023" y="511.573656" transform="rotate(-0 557.95023 511.573656)">Размер группы HQQ INT4</text>
     </g>
    </g>
    <g id="matplotlib.axis_8">
@@ -919,72 +919,72 @@ L 705.6 482.976
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_26">
-    <text style="font-size: 12px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="557.95023" y="301.170783" transform="rotate(-0 557.95023 301.170783)">Qwen3-4B · QA EN</text>
+    <text style="font-size: 12px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="557.95023" y="301.170783" transform="rotate(-0 557.95023 301.170783)">Qwen3-4B · MultiFieldQA (англ.)</text>
    </g>
   </g>
   <g id="text_27">
-   <text style="font-size: 14px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="360" y="16.253812" transform="rotate(-0 360 16.253812)">The group-size boundary depends on model, task and prefill</text>
+   <text style="font-size: 14px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" x="360" y="16.252719" transform="rotate(-0 360 16.252719)">Влияние размера группы зависит от модели, задачи и подачи текста</text>
   </g>
   <g id="text_28">
-   <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; fill: #555555" transform="translate(185.483672 533.694551)">80 questions per cell · 95% paired document-bootstrap CIs · 2,000 resamples</text>
-   <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; fill: #555555" transform="translate(153.175781 544.497012)">Native chat, FP16/SDPA, residual 128 · Exploratory intervals without multiplicity adjustment</text>
+   <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; fill: #555555" transform="translate(143.045156 533.694551)">80 вопросов на ячейку · Парные 95% bootstrap-интервалы по документам · 2 000 повторов</text>
+   <text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; fill: #555555" transform="translate(166.044375 544.497012)">Native chat, FP16/SDPA, residual 128 · Без поправки на множественные сравнения</text>
   </g>
   <g id="legend_1">
    <g id="LineCollection_9">
-    <path d="M 240.847656 43.370438
-L 240.847656 33.370438
+    <path d="M 215.810937 43.370438
+L 215.810937 33.370438
 " style="fill: none; stroke: #ce701a; stroke-width: 1.6"/>
    </g>
    <g id="line2d_89">
     <g>
-     <use xlink:href="#m2ef3b93601" x="240.847656" y="43.370438" style="fill: #ce701a; stroke: #ce701a"/>
+     <use xlink:href="#m2ef3b93601" x="215.810937" y="43.370438" style="fill: #ce701a; stroke: #ce701a"/>
     </g>
    </g>
    <g id="line2d_90">
     <g>
-     <use xlink:href="#m2ef3b93601" x="240.847656" y="33.370438" style="fill: #ce701a; stroke: #ce701a"/>
+     <use xlink:href="#m2ef3b93601" x="215.810937" y="33.370438" style="fill: #ce701a; stroke: #ce701a"/>
     </g>
    </g>
    <g id="line2d_91">
-    <path d="M 230.847656 38.370438
-L 250.847656 38.370438
+    <path d="M 205.810937 38.370438
+L 225.810937 38.370438
 " style="fill: none; stroke: #ce701a; stroke-width: 1.6; stroke-linecap: square"/>
    </g>
    <g id="line2d_92">
     <g>
-     <use xlink:href="#m3db5f21a1b" x="240.847656" y="38.370438" style="fill: #ce701a; stroke: #ce701a"/>
+     <use xlink:href="#m3db5f21a1b" x="215.810937" y="38.370438" style="fill: #ce701a; stroke: #ce701a"/>
     </g>
    </g>
    <g id="text_29">
-    <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="258.847656" y="41.870438" transform="rotate(-0 258.847656 41.870438)">Whole prompt</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="233.810937" y="41.870438" transform="rotate(-0 233.810937 41.870438)">Весь текст</text>
    </g>
    <g id="LineCollection_10">
-    <path d="M 359.667969 43.370438
-L 359.667969 33.370438
+    <path d="M 320.7375 43.370438
+L 320.7375 33.370438
 " style="fill: none; stroke: #226eac; stroke-width: 1.6"/>
    </g>
    <g id="line2d_93">
     <g>
-     <use xlink:href="#m1e689dbe1a" x="359.667969" y="43.370438" style="fill: #226eac; stroke: #226eac"/>
+     <use xlink:href="#m1e689dbe1a" x="320.7375" y="43.370438" style="fill: #226eac; stroke: #226eac"/>
     </g>
    </g>
    <g id="line2d_94">
     <g>
-     <use xlink:href="#m1e689dbe1a" x="359.667969" y="33.370438" style="fill: #226eac; stroke: #226eac"/>
+     <use xlink:href="#m1e689dbe1a" x="320.7375" y="33.370438" style="fill: #226eac; stroke: #226eac"/>
     </g>
    </g>
    <g id="line2d_95">
-    <path d="M 349.667969 38.370438
-L 369.667969 38.370438
+    <path d="M 310.7375 38.370438
+L 330.7375 38.370438
 " style="fill: none; stroke: #226eac; stroke-width: 1.6; stroke-linecap: square"/>
    </g>
    <g id="line2d_96">
     <g>
-     <use xlink:href="#m45e0ae387b" x="359.667969" y="38.370438" style="fill: #226eac; stroke: #226eac; stroke-linejoin: miter"/>
+     <use xlink:href="#m45e0ae387b" x="320.7375" y="38.370438" style="fill: #226eac; stroke: #226eac; stroke-linejoin: miter"/>
     </g>
    </g>
    <g id="text_30">
-    <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="377.667969" y="41.870438" transform="rotate(-0 377.667969 41.870438)">Context then question</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" x="338.7375" y="41.870438" transform="rotate(-0 338.7375 41.870438)">Сначала документ, затем вопрос</text>
    </g>
   </g>
  </g>

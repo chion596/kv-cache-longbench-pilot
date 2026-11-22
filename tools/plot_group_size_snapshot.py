@@ -24,13 +24,13 @@ def main():
     matplotlib.rcParams.update({"font.size": 10, "svg.fonttype": "none", "svg.hashsalt": "group-size-20261110"})
     fig, axes = plt.subplots(2, 2, figsize=(10, 7.8), sharex=True, sharey=True)
     models = (("qwen3-1.7b", "Qwen3-1.7B"), ("qwen3-4b", "Qwen3-4B"))
-    datasets = (("passage_retrieval_en", "Retrieval EN"), ("multifieldqa_en", "QA EN"))
+    datasets = (("passage_retrieval_en", "Поиск абзаца (англ.)"), ("multifieldqa_en", "MultiFieldQA (англ.)"))
     for row_index, (model, model_label) in enumerate(models):
         for column, (dataset, dataset_label) in enumerate(datasets):
             ax = axes[row_index, column]
             for protocol, label, color, offset, marker in (
-                    ("single_prefill", "Whole prompt", "#ce701a", -0.035, "o"),
-                    ("context_then_question", "Context then question", "#226eac", 0.035, "s")):
+                    ("single_prefill", "Весь текст", "#ce701a", -0.035, "o"),
+                    ("context_then_question", "Сначала документ, затем вопрос", "#226eac", 0.035, "s")):
                 rows = [contrasts[(model, dataset, protocol, f"int4_g{g}-dynamic")] for g in (16, 32, 64)]
                 values = [float(r["delta_pp"]) for r in rows]
                 errors = [[v - float(r["cluster_ci95_low_pp"]) for r, v in zip(rows, values)],
@@ -46,14 +46,14 @@ def main():
             ax.set_axisbelow(True)
             ax.spines[["top", "right"]].set_visible(False)
             if column == 0:
-                ax.set_ylabel("Score change vs own Dynamic (pp)")
+                ax.set_ylabel("Изменение оценки (п.п.)")
             if row_index == 1:
-                ax.set_xlabel("HQQ INT4 group size")
+                ax.set_xlabel("Размер группы HQQ INT4")
     handles, labels = axes[0, 0].get_legend_handles_labels()
-    fig.suptitle("The group-size boundary depends on model, task and prefill", fontsize=14, y=0.99)
+    fig.suptitle("Влияние размера группы зависит от модели, задачи и подачи текста", fontsize=14, y=0.99)
     fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.5, 0.955), ncol=2, frameon=False)
-    fig.text(0.5, 0.025, "80 questions per cell · 95% paired document-bootstrap CIs · 2,000 resamples\n"
-             "Native chat, FP16/SDPA, residual 128 · Exploratory intervals without multiplicity adjustment",
+    fig.text(0.5, 0.025, "80 вопросов на ячейку · Парные 95% bootstrap-интервалы по документам · 2 000 повторов\n"
+             "Native chat, FP16/SDPA, residual 128 · Без поправки на множественные сравнения",
              ha="center", va="bottom", fontsize=9, color="#555555")
     fig.subplots_adjust(top=0.86, bottom=0.14, left=0.09, right=0.98, hspace=0.3, wspace=0.17)
     svg = Path(args.svg)

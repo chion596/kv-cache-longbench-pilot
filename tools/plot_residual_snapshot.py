@@ -35,10 +35,10 @@ def main():
     ax.grid(axis='x', alpha=0.2)
     ax.set_axisbelow(True)
     ax.spines[['top', 'right']].set_visible(False)
-    ax.set_xlabel('Retrieval score change: residual 512 − 128 (pp)')
-    ax.set_title('Suppressing refresh: score changes and remaining uncertainty', fontsize=14, pad=16)
-    fig.text(0.5, 0.03, '80 paired documents per cell · Split prefill · HQQ INT4\n'
-             '95% document-bootstrap CIs · Exploratory intervals without multiplicity adjustment',
+    ax.set_xlabel('Изменение оценки поиска: residual 512 − 128 (п.п.)')
+    ax.set_title('Повторное сжатие отключено: изменение оценки и неопределённость', fontsize=14, pad=16)
+    fig.text(0.5, 0.03, '80 парных документов на ячейку · Подача «документ → вопрос» · HQQ INT4\n'
+             'Парные 95% bootstrap-интервалы по документам · Без поправки на множественные сравнения',
              ha='center', fontsize=9, color='#555555')
     fig.subplots_adjust(left=0.24, right=0.98, bottom=0.23, top=0.85)
     svg = root / 'residual_effect.svg'
