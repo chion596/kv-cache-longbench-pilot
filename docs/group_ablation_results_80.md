@@ -4,9 +4,9 @@
 
 ## Коротко
 
-На модели Qwen3-1.7B в stock HQQ QuantizedCache (`nbits=4`,
-`axis_key=1`, `axis_value=1`, `residual_length=128`) сравнили
-обычный DynamicCache и четыре размера группы: 16, 32, 64 и 128.
+На Qwen3-1.7B я сравнил обычный DynamicCache и четыре размера группы:
+16, 32, 64 и 128. Для HQQ QuantizedCache использовал `nbits=4`,
+`axis_key=1`, `axis_value=1` и `residual_length=128`.
 
 В качестве проверки использованы **80 новых задач** каждого из трёх
 поднаборов LongBench; они не пересекались с исходным пилотом n=40.

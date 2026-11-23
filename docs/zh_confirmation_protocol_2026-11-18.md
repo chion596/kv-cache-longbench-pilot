@@ -48,7 +48,7 @@ transient dequant buffers. Равенство K8/V4–K4/V8 GPU bytes прове
 прежние файлы; автоматически другую выборку не выбирает. Prepared-входы всех
 политик/моделей и selection записываются одной новой immutable серией.
 Повторная подготовка только проверяет сохранённые входы. После фиксации
-выборки её случаи уже видны в истории; старый preview повторно не запускаем.
+выборки её случаи уже видны в истории; старый preview я повторно не запускаю.
 
 История покрывает опубликованный аудит и локальные `data/prepared`, `results`.
 Exact hashes не исключают смысловые дубли, переводы, pretraining contamination
@@ -102,9 +102,9 @@ logits/output IDs. Качество и runtime по этим трём stress-cas
 python -m src.score_zh_confirmation --phase smoke
 ```
 
-Ожидаются 8 ячеек / 24 ответа, пройденные stock/exact сверки, нет refresh,
-равные primary bytes. При падении сначала смотрим `logs/lb-zh-v1-*.err`
-и `sacct -j ARRAY_ID --format=JobID,State,ExitCode,Elapsed`, не запускаем full.
+Я ожидаю 8 ячеек / 24 ответа, пройденные stock/exact сверки, отсутствие refresh
+и равные primary bytes. При падении сначала смотрю `logs/lb-zh-v1-*.err`
+и `sacct -j ARRAY_ID --format=JobID,State,ExitCode,Elapsed`; full пока не запускаю.
 
 **Шаг 2: full после разбора успешного smoke.**
 

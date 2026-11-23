@@ -1,97 +1,64 @@
-KV CACHE + LONGBENCH: ТЕКУЩИЙ СТАРТ
+KV-CACHE И LONGBENCH: МОЙ ТЕКУЩИЙ СТАТУС
 
-Прежние пилоты Qwen3-1.7B и SmolLM3-3B завершены и описаны в README.
-Серия protocol_v1 завершена: 36 ячеек, 2 880 ответов, n=80.
-Серия group_size_v1 завершена: 8 ячеек g32, 640 новых ответов.
-Серия residual_v1 завершена: 4 ячейки, 320 новых ответов.
-Серия expansion_v1 завершена: 48 ячеек, 3 840 новых ответов.
-Текущий отчёт: docs/expansion_results_2026-11-12.md.
-CPU-разбор expansion завершён: docs/expansion_diagnostics_2026-11-14.md.
-Контроль refresh: docs/residual_results_2026-11-11.md.
-Границы g32/g64: docs/group_size_results_2026-11-10.md.
-Основная матрица: docs/protocol_v1_full_results_2026-11-08.md.
-Агрегаты и интервалы: reports/protocol_v1_2026-11-08/.
+Я продолжаю исследование из README. Здесь собраны завершённые серии и мой
+ближайший шаг. Полная история решений находится в
+docs/история_экспериментов_и_аудит_2026-11-21.txt.
 
-CPU-диагностика завершена:
-  docs/protocol_v1_diagnostics_2026-11-08.md
+ЗАВЕРШЁННЫЕ СЕРИИ
 
-Диагностика g32 завершена:
-  docs/group_size_diagnostics_2026-11-10.md
+- Первые пилоты Qwen3-1.7B и SmolLM3-3B описаны в README.
+- protocol_v1: 36 ячеек, 2 880 ответов, n=80.
+  Результат: docs/protocol_v1_full_results_2026-11-08.md.
+  Диагностика: docs/protocol_v1_diagnostics_2026-11-08.md.
+- group_size_v1: 8 ячеек g32, 640 ответов.
+  Результат: docs/group_size_results_2026-11-10.md.
+  Диагностика: docs/group_size_diagnostics_2026-11-10.md.
+- residual_v1: 4 ячейки, 320 ответов.
+  Результат: docs/residual_results_2026-11-11.md.
+- expansion_v1: 48 ячеек, 3 840 ответов на новых документах и HotpotQA.
+  Результат: docs/expansion_results_2026-11-12.md.
+  Диагностика: docs/expansion_diagnostics_2026-11-14.md.
+- kv_probe_v1: 14 ячеек, 280 оценок. В этой постановке основная
+  чувствительность g64 связана с K.
+  Результат: docs/kv_probe_results_2026-11-15.md.
+  Диагностика: docs/kv_probe_diagnostics_2026-11-15.md.
+- mixed_precision_v1: 20 ячеек, 1 600 ответов. При равном объёме cache
+  K8/V4 показал лучший результат, чем K4/V8.
+  Результат: docs/mixed_precision_results_2026-11-17.md.
 
-Аудит кластера прошёл: 159 JSONL, 7 669 записей, ошибок нет.
-Основные и subset-интервалы expansion_v1 опубликованы в reports/expansion_v1_full_2026-11-12/.
+МОЙ ТЕКУЩИЙ ШАГ
 
-Smoke kv_probe_v1 пройден: 14 ячеек, 42 основные оценки,
-точное совпадение со stock HQQ, refresh отсутствует.
-Результат: docs/kv_probe_smoke_2026-11-14.md.
+Я подготовил отдельную китайскую серию на 120 новых документов. CPU-preflight
+проверил, что выборка доступна и что один длинный вопрос требует residual1024.
+Smoke прошёл технические проверки: 8 ячеек и 24 ответа. Этого недостаточно,
+чтобы судить о качестве на всей выборке.
 
-Full kv_probe_v1 завершён: 14 ячеек, 280 оценок, 40 контрастов.
-Основная чувствительность g64 локализуется в K для проверенной постановки.
-Полный отчёт: docs/kv_probe_results_2026-11-15.md.
+Протокол: docs/zh_confirmation_protocol_2026-11-18.md.
+CPU-preflight: docs/zh_preflight_results_2026-11-18.md.
+Smoke: docs/zh_confirmation_smoke_2026-11-21.md.
+Подробная история решений: docs/история_экспериментов_и_аудит_2026-11-21.txt.
 
-CPU-разбор K/V завершён: docs/kv_probe_diagnostics_2026-11-15.md.
+Чтобы отправить full на кластере ВШЭ, я выполняю:
 
-Smoke mixed_precision_v1 пройден: 20 ячеек, 60 основных ответов,
-stock/exact-сверки, нужная битность, нет refresh, равные K8/V4–K4/V8 bytes.
-Результат: docs/mixed_precision_smoke_2026-11-15.md.
-
-Full mixed_precision_v1 завершён: 20 ячеек, 1 600 ответов, 28 основных
-и 14 untruncated-контрастов. Отчёт: docs/mixed_precision_results_2026-11-17.md.
-
-CPU-preflight ZH завершён 18 ноября: 120 новых контекстов доступны,
-335 JSONL / 14 475 записей, ошибок нет. Один query+32=847 требует residual >847.
-Для отдельной zh_confirmation_v1 выбран общий residual1024; случаев не исключаем.
-Результат: docs/zh_preflight_results_2026-11-18.md.
-
-Следующий шаг — ZH full через Slurm:
   cd ~/kv-cache-longbench-pilot
   git pull --ff-only
   module load python
   conda activate kvcache
   bash tools/start_zh_confirmation.sh full
 
-ZH smoke завершён: 8 ячеек / 24 ответа, stock/exact сверки прошли,
-refresh не было, primary bytes равны. Самый длинный query815 прошёл.
-Качество smoke только техническое; на трёх stress-примерах его не обобщаем.
-Отчёт: docs/zh_confirmation_smoke_2026-11-21.md.
+После завершения заданий я считаю результаты:
 
-После двух job:
   python -m src.score_zh_confirmation --phase full
 
-Протокол новой серии: docs/zh_confirmation_protocol_2026-11-18.md.
-Прежний preview JSON сохраняется: results/zh_confirmation_preflight_2026-11-17.json.
-После фиксации prepared старый preview повторно не запускаем.
+КАК Я ПОЛЬЗУЮСЬ РЕПОЗИТОРИЕМ
 
-Полная хронология и объяснение решений: docs/история_экспериментов_и_аудит_2026-11-21.txt.
+Подробные протоколы и команды я храню в docs/, матрицы — в experiments/,
+а сводные таблицы и графики — в reports/. Данные и вычисления хранятся
+на кластере ВШЭ. Полный список технических проверок и оговорок есть в
+docs/история_экспериментов_и_аудит_2026-11-21.txt.
 
-Для повторения CPU-разбора expansion_v1 на login-узле:
-  python -m src.analyze_expansion
-
-Подробные условия, выборка и команды:
-  docs/expansion_protocol_2026-11-11.md
-
-План расширения и ограничения независимости:
-  docs/next_stage_2026-11-11.md
-
-Для воспроизведения завершённого residual-контроля:
-  docs/residual_control_2026-11-10.md
-
-Для воспроизведения завершённой серии g32:
-  docs/group_size_control_2026-11-08.md
-
-Пошаговая инструкция:
-  docs/next_experiments_2026-11-03.md
-
-Для воспроизведения завершённой серии:
-1. На login-узле: git pull --ff-only, module load python, conda activate kvcache.
-2. Проверить существующий Qwen3-4B n80, архив и локальные веса.
-3. Подготовить native-chat входы для трёх моделей, не меняя старые каталоги.
-4. Отправить только smoke: sbatch --export=ALL,PHASE=smoke slurm/protocol.sbatch.
-5. Проверить Slurm, model.generate parity, Dynamic split parity и реальные ответы.
-6. При успешных проверках отправить full; анализ — src.score_protocol.
-
-Матрица: experiments/protocol_v1.json (36 ячеек, 2 880 основных ответов).
-Разбор и дальнейшие гипотезы: docs/review_2026-11-03.md.
-
-Не коммитить веса, исходные документы, токены, ключи и локальное окружение.
-GPU-вычисления выполнять через Slurm. Коммиты — кратко и на русском.
+Перед новым запуском я проверяю соответствующий протокол и сохранность
+подготовленных данных. Завершённые серии и их результаты не перезаписываю;
+новую постановку сохраняю отдельно. GPU-задания отправляю через Slurm.
+В Git не добавляю веса моделей, исходные документы, токены, ключи и локальное
+окружение. Коммиты называю коротко и по-русски.
